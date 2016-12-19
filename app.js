@@ -9,6 +9,7 @@ const app = express();
 const port = 8585;
 
 app.use('/', express.static(path.join(__dirname, '/public')));
+app.use('/materialize', express.static(path.join(__dirname, '/node_modules/materialize-css/dist')));
 
 // Start the port
 app.listen(port, () => {

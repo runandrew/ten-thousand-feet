@@ -2,10 +2,46 @@
 <html>
 <head>
     <title>10,000 Feet</title>
+
+    <!-- Google Icon Font -->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Materialize CSS -->
+    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+    <!-- Load custom CSS -->
     <link href="stylesheets/style.css" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 
 <body>
-    <h1>Welcome to 10,000 Feet</h1>
+    <nav class="red lighten-2" role="navigation">
+        <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">10,000 Feet</a>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="#">Login</a></li>
+            </ul>
+
+            <ul id="nav-mobile" class="side-nav">
+                <li><a href="#">Login</a></li>
+            </ul>
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            <div class="row center" id="mainSet">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="hidden">
+        <p><strong>Project: </strong><span id="value">100</span></p>
+        <p><strong>Duration: </strong><span id="duration">100</span> mins</p>
+    </div>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="/js/d3-wakatime.js"></script>
 </body>
 </html>
