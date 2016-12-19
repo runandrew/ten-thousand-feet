@@ -1,0 +1,11 @@
+{
+  "name": "ten-thousand-feet",
+  "version": "1.0.0",
+  "description": "A high-level overview of your day's phyical and coding activity.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Garcia",
+  "license": "ISC"
+}
