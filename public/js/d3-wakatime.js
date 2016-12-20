@@ -570,8 +570,12 @@ const activity = durationData.data;
 
 // SVG Parameters
 const svgWidth = 900;
-const svgHeight = 400;
+const svgHeight = 250;
 const padding = 30;
+
+// Colors
+const codeDark = '#e65100';
+const codeLight = '#ffb74d'
 
 // Create SVG
 const svg = d3.select('#mainSet')
@@ -585,7 +589,7 @@ const xScale = d3.scaleTime()
 .range([0 + padding, svgWidth - padding * 2]);
 
 const yScale = d3.scaleLinear()
-.domain([0, 10])
+.domain([0, 5])
 .range([svgHeight - padding, 0 + padding]);
 
 const xAxis = d3.axisBottom()
@@ -616,13 +620,13 @@ svg.append('g')
 .attr('y', data => yScale(5))
 .attr('width', data => xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time)))
 .attr('height', data => svgHeight - yScale(5) - padding)
-.attr('fill', 'darkblue')
+.attr('fill', codeDark)
 .on('mouseover', function(data) {
 
     d3.select(this)
     .transition()
     .duration(250)
-    .attr('fill', 'lightblue');
+    .attr('fill', codeLight);
 
     //Get this bar's x/y values, then augment for the tooltip
     const xPosition = parseFloat(d3.select(this).attr('x'));
@@ -630,8 +634,8 @@ svg.append('g')
 
     //Update the tooltip position and value
     d3.select('#tooltip')
-    .style('left', xPosition + 'px')
-    .style('top', yPosition + 'px')
+    .style('left', xPosition + 125 + 'px')
+    .style('top', yPosition + 50 + 'px')
     .select('#value')
     .text(data.project)
 
@@ -646,7 +650,7 @@ svg.append('g')
     d3.select(this)
     .transition()
     .duration(250)
-    .attr('fill', 'darkblue');
+    .attr('fill', codeDark);
 
     d3.select('#tooltip').classed('hidden', true);
 });

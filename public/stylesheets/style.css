@@ -21,7 +21,14 @@
 
 #tooltip p {
         margin: 0;
-        font-family: sans-serif;
         font-size: 16px;
         line-height: 20px;
+}
+
+#graph {
+    position: relative;
+}
+
+#logo-container img {
+    margin-right: 0.50em;
 }
