@@ -662,5 +662,3 @@ function convertSToDate(timeS) {
 function calcTotalCodingHours(data) {
     return data.reduce((prev, curr) => prev + curr.duration, 0) / 60 / 60;
 }
-
-console.log(calcTotalCodingHours(activity));

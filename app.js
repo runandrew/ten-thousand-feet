@@ -3,13 +3,20 @@
 // Required libraries
 const express = require('express');
 const path = require('path');
+const volleyball = require('volleyball');
 
 // App creation
 const app = express();
 const port = 8585;
 
+// Middleware
+// Logging
+app.use(volleyball);
+
+// Static file serving
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/materialize', express.static(path.join(__dirname, '/node_modules/materialize-css/dist')));
+
 
 // Start the port
 app.listen(port, () => {
