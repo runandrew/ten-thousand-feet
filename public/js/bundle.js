@@ -56,31 +56,25 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
-	var _reactRouter = __webpack_require__(228);
-	
 	var _store = __webpack_require__(216);
 	
 	var _store2 = _interopRequireDefault(_store);
 	
-	var _Root = __webpack_require__(226);
+	var _Routes = __webpack_require__(282);
 	
-	var _Root2 = _interopRequireDefault(_Root);
+	var _Routes2 = _interopRequireDefault(_Routes);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// import Routes from './Routes'
+	// Render to DOM
+	
 	
 	// Required files
-	// Required packages
 	_reactDom2.default.render(_react2.default.createElement(
 	  _reactRedux.Provider,
 	  { store: _store2.default },
-	  _react2.default.createElement(
-	    _reactRouter.Router,
-	    { history: _reactRouter.browserHistory },
-	    _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Root2.default })
-	  )
-	), document.getElementById('app'));
+	  _react2.default.createElement(_Routes2.default, null)
+	), document.getElementById('app')); // Required packages
 
 /***/ },
 /* 1 */
@@ -24661,7 +24655,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 	exports.default = reducer;
 	/* -----------------    ACTIONS     ------------------ */
@@ -24669,29 +24663,367 @@
 	
 	/* ------------   ACTION CREATORS     ------------------ */
 	var setData = function setData(data) {
-	    return { type: SET_DATA, data: data };
+	  return { type: SET_DATA, data: data };
 	};
 	
 	/* ------------       REDUCER     ------------------ */
 	function reducer() {
-	    var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-	    var action = arguments[1];
+	  var durationData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var action = arguments[1];
 	
-	    switch (action.type) {
-	        case SET_DATA:
-	            return {
-	                data: action.data
-	            };
-	        default:
-	            return data;
-	    }
+	  switch (action.type) {
+	    case SET_DATA:
+	      return {
+	        durationData: action.data
+	      };
+	    default:
+	      return durationData;
+	  }
 	}
 	
 	/* ------------       DISPATCHERS     ------------------ */
-	var fetchData = exports.fetchData = function fetchData() {
-	    return function (dispatch) {
-	        return [1];
-	    };
+	var fetchCodeData = exports.fetchCodeData = function fetchCodeData() {
+	  return function (dispatch) {
+	    return dispatch(setData(codeData));
+	  };
+	};
+	
+	var codeData = {
+	  'branches': ['master'],
+	  'data': [{
+	    'dependencies': [],
+	    'duration': 249,
+	    'is_debugging': false,
+	    'project': 'CodeWars',
+	    'time': 1481376510.96
+	  }, {
+	    'dependencies': [],
+	    'duration': 0.09,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481384387.98
+	  }, {
+	    'dependencies': [],
+	    'duration': 4652,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481385365.49
+	  }, {
+	    'dependencies': [],
+	    'duration': 131.56,
+	    'is_debugging': false,
+	    'project': 'juke-react-redux-with-andrew',
+	    'time': 1481390017.23
+	  }, {
+	    'dependencies': [],
+	    'duration': 324,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481390148.79
+	  }, {
+	    'dependencies': [],
+	    'duration': 4.21,
+	    'is_debugging': false,
+	    'project': 'juke-react-redux-with-andrew',
+	    'time': 1481390473.16
+	  }, {
+	    'dependencies': [],
+	    'duration': 1754,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481390477.37
+	  }, {
+	    'dependencies': [],
+	    'duration': 828,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481393881.72
+	  }, {
+	    'dependencies': [],
+	    'duration': 2998,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481394710.04
+	  }, {
+	    'dependencies': [],
+	    'duration': 308.53,
+	    'is_debugging': false,
+	    'project': 'juke-react-redux-with-andrew',
+	    'time': 1481397708.03
+	  }, {
+	    'dependencies': [],
+	    'duration': 151,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481398016.56
+	  }, {
+	    'dependencies': [],
+	    'duration': 7.8,
+	    'is_debugging': false,
+	    'project': 'Unknown Project',
+	    'time': 1481398167.87
+	  }, {
+	    'dependencies': [],
+	    'duration': 6.51,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481398175.67
+	  }, {
+	    'dependencies': [],
+	    'duration': 26,
+	    'is_debugging': false,
+	    'project': 'Unknown Project',
+	    'time': 1481398182.18
+	  }, {
+	    'dependencies': [],
+	    'duration': 411,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481398208.49
+	  }, {
+	    'dependencies': [],
+	    'duration': 12,
+	    'is_debugging': false,
+	    'project': 'Unknown Project',
+	    'time': 1481398619.73
+	  }, {
+	    'dependencies': [],
+	    'duration': 1223,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481398632.16
+	  }, {
+	    'dependencies': [],
+	    'duration': 137,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481399855.3
+	  }, {
+	    'dependencies': [],
+	    'duration': 49,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481399992.5
+	  }, {
+	    'dependencies': ['chai-spies', 'react-redux', 'nodemon', 'commander', 'request-promise', 'babel-loader', 'react-dom', 'pg-hstore', 'axios', 'pg-native', 'babel', 'redux-logger', 'itunes-library-stream', 'webpack', 'pg', 'babel-preset-react', 'babel-core', 'serve-favicon', 'npm', 'chai', 'redux-thunk', 'express', 'babel-preset-es2015', 'react', 'fs-misc', 'mime', 'musicmetadata', 'testem', 'mocha', 'sequelize', 'xml2json', 'lodash', 'userhome', 'bootstrap', 'request', 'volleyball', 'body-parser', 'chalk', 'react-router', 'redux', 'node-status'],
+	    'duration': 51.23,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481400041.77
+	  }, {
+	    'dependencies': ['npm', 'isomorphic-fetch', 'redux-logger', 'redux-thunk', 'react-redux', 'nodemon', 'babel-preset-es2015', 'react-dom', 'react', 'webpack', 'babel-loader', 'babel-preset-react', 'babel-core', 'redux'],
+	    'duration': 32.98,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481400093
+	  }, {
+	    'dependencies': ['chai-spies', 'react-redux', 'nodemon', 'commander', 'request-promise', 'babel-loader', 'react-dom', 'pg-hstore', 'axios', 'pg-native', 'babel', 'redux-logger', 'itunes-library-stream', 'webpack', 'pg', 'babel-preset-react', 'babel-core', 'serve-favicon', 'npm', 'chai', 'redux-thunk', 'express', 'babel-preset-es2015', 'react', 'fs-misc', 'mime', 'musicmetadata', 'testem', 'mocha', 'sequelize', 'xml2json', 'lodash', 'userhome', 'bootstrap', 'request', 'volleyball', 'body-parser', 'chalk', 'react-router', 'redux', 'node-status'],
+	    'duration': 7.87,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481400125.98
+	  }, {
+	    'dependencies': ['npm', 'babel-preset-stage-0', 'babel-preset-latest', 'react-redux', 'babel-cli', 'nodemon', 'babel-preset-es2015', 'react-dom', 'react', 'babel-loader', 'babel-preset-react', 'babel-core', 'redux'],
+	    'duration': 10.79,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481400133.85
+	  }, {
+	    'dependencies': ['npm', 'isomorphic-fetch', 'redux-logger', 'redux-thunk', 'react-redux', 'nodemon', 'babel-preset-es2015', 'react-dom', 'react', 'webpack', 'babel-loader', 'babel-preset-react', 'babel-core', 'redux'],
+	    'duration': 790,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481400144.64
+	  }, {
+	    'dependencies': [],
+	    'duration': 5.24,
+	    'is_debugging': false,
+	    'project': 'redux-practice-todo',
+	    'time': 1481400934.53
+	  }, {
+	    'dependencies': [],
+	    'duration': 115,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481400939.77
+	  }, {
+	    'dependencies': ['chai-spies', 'react-redux', 'nodemon', 'commander', 'request-promise', 'babel-loader', 'react-dom', 'pg-hstore', 'axios', 'pg-native', 'babel', 'redux-logger', 'itunes-library-stream', 'webpack', 'pg', 'babel-preset-react', 'babel-core', 'serve-favicon', 'npm', 'chai', 'redux-thunk', 'express', 'babel-preset-es2015', 'react', 'fs-misc', 'mime', 'musicmetadata', 'testem', 'mocha', 'sequelize', 'xml2json', 'lodash', 'userhome', 'bootstrap', 'request', 'volleyball', 'body-parser', 'chalk', 'react-router', 'redux', 'node-status'],
+	    'duration': 34.1,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481401054.29
+	  }, {
+	    'dependencies': [],
+	    'duration': 1012,
+	    'is_debugging': false,
+	    'project': 'redux-practice-redditAPI',
+	    'time': 1481401088.39
+	  }, {
+	    'dependencies': [],
+	    'duration': 2625,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481405409.08
+	  }, {
+	    'dependencies': [],
+	    'duration': 417,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481410076.9
+	  }, {
+	    'dependencies': [],
+	    'duration': 8.22,
+	    'is_debugging': false,
+	    'project': 'Unknown Project',
+	    'time': 1481410493.89
+	  }, {
+	    'dependencies': [],
+	    'duration': 654,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481410502.11
+	  }, {
+	    'dependencies': [],
+	    'duration': 12.44,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481411156.35
+	  }, {
+	    'dependencies': [],
+	    'duration': 143,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481411168.79
+	  }, {
+	    'dependencies': [],
+	    'duration': 18.15,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481411312.27
+	  }, {
+	    'dependencies': [],
+	    'duration': 490,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481411330.42
+	  }, {
+	    'dependencies': [],
+	    'duration': 31,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481411820.64
+	  }, {
+	    'dependencies': [],
+	    'duration': 8,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481411851.34
+	  }, {
+	    'dependencies': [],
+	    'duration': 3.32,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481411859.34
+	  }, {
+	    'dependencies': [],
+	    'duration': 5.7,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481411862.66
+	  }, {
+	    'dependencies': [],
+	    'duration': 25.84,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481411868.36
+	  }, {
+	    'dependencies': [],
+	    'duration': 325,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481411894.2
+	  }, {
+	    'dependencies': [],
+	    'duration': 1.4,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481412219.65
+	  }, {
+	    'dependencies': [],
+	    'duration': 448,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481412221.05
+	  }, {
+	    'dependencies': [],
+	    'duration': 23.8,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481412669.05
+	  }, {
+	    'dependencies': [],
+	    'duration': 288,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481412692.85
+	  }, {
+	    'dependencies': [],
+	    'duration': 11.41,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481412980.64
+	  }, {
+	    'dependencies': [],
+	    'duration': 737,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481412992.05
+	  }, {
+	    'dependencies': [],
+	    'duration': 0.83,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481413729.09
+	  }, {
+	    'dependencies': [],
+	    'duration': 150,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481413729.92
+	  }, {
+	    'dependencies': [],
+	    'duration': 1332,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481416543.12
+	  }, {
+	    'dependencies': [],
+	    'duration': 1248,
+	    'is_debugging': false,
+	    'project': 'start',
+	    'time': 1481421214.04
+	  }, {
+	    'dependencies': [],
+	    'duration': 28.85,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481422461.64
+	  }, {
+	    'dependencies': [],
+	    'duration': 120,
+	    'is_debugging': false,
+	    'project': 'checkpoint-express-review',
+	    'time': 1481422490.49
+	  }, {
+	    'dependencies': [],
+	    'duration': 761,
+	    'is_debugging': false,
+	    'project': '1610-FSA-RM-Library',
+	    'time': 1481422610.86
+	  }],
+	  'end': '2016-12-11T04:59:59Z',
+	  'start': '2016-12-10T05:00:00Z',
+	  'timezone': 'America/New_York'
 	};
 
 /***/ },
@@ -29611,6 +29943,8 @@
 	    value: true
 	});
 	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -29621,90 +29955,238 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global d3 */
+	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	var SingleGraph = function SingleGraph() {
+	var SingleGraph = function (_React$Component) {
+	    _inherits(SingleGraph, _React$Component);
 	
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'section no-pad-bot', id: 'graph' },
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'container' },
-	            _react2.default.createElement(
+	    function SingleGraph() {
+	        _classCallCheck(this, SingleGraph);
+	
+	        return _possibleConstructorReturn(this, (SingleGraph.__proto__ || Object.getPrototypeOf(SingleGraph)).apply(this, arguments));
+	    }
+	
+	    _createClass(SingleGraph, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var activity = this.props.codeData.durationData.data;
+	            // SVG Parameters
+	            var svgWidth = 900;
+	            var svgHeight = 250;
+	            var padding = 30;
+	
+	            // Colors
+	            var codeDark = '#e65100';
+	            var codeLight = '#ffb74d';
+	
+	            // Create SVG
+	            var svg = d3.select('#mainSet').append('svg').attr('width', svgWidth).attr('height', svgHeight);
+	
+	            // Scaling
+	            var xScale = d3.scaleTime().domain([new Date(2016, 11, 10, 6), new Date(2016, 11, 10, 24)]).range([0 + padding, svgWidth - padding * 2]);
+	
+	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
+	
+	            var xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour.every(1));
+	
+	            var yAxis = d3.axisLeft().scale(yScale).ticks(5);
+	
+	            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (svgHeight - padding) + ')').call(xAxis);
+	
+	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + padding + ', 0)').call(yAxis);
+	
+	            svg.append('g').attr('id', 'bars').selectAll('rect').data(activity).enter().append('rect').attr('x', function (data) {
+	                return xScale(convertSToDate(data.time));
+	            }).attr('y', function (data) {
+	                return yScale(5);
+	            }).attr('width', function (data) {
+	                return xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time));
+	            }).attr('height', function (data) {
+	                return svgHeight - yScale(5) - padding;
+	            }).attr('fill', codeDark).on('mouseover', function (data) {
+	
+	                d3.select(this).transition().duration(250).attr('fill', codeLight);
+	
+	                //Get this bar's x/y values, then augment for the tooltip
+	                var xPosition = parseFloat(d3.select(this).attr('x'));
+	                var yPosition = parseFloat(d3.select(this).attr('y'));
+	
+	                //Update the tooltip position and value
+	                d3.select('#tooltip').style('left', xPosition + 125 + 'px').style('top', yPosition + 50 + 'px').select('#value').text(data.project);
+	
+	                d3.select('#duration').text(Math.round(data.duration / 60));
+	
+	                //Show the tooltip
+	                d3.select('#tooltip').classed('hidden', false);
+	            }).on('mouseout', function (data) {
+	                d3.select(this).transition().duration(250).attr('fill', codeDark);
+	
+	                d3.select('#tooltip').classed('hidden', true);
+	            });
+	
+	            function convertSToDate(timeS) {
+	                return new Date(timeS * 1000);
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            console.log('these are the props', this.props);
+	
+	            return _react2.default.createElement(
 	                'div',
-	                { className: 'row center' },
+	                { className: 'section no-pad-bot', id: 'graph' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'card grey lighten-5' },
+	                    { className: 'container' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'card-content', id: 'mainSet' },
+	                        { className: 'row center' },
 	                        _react2.default.createElement(
-	                            'span',
-	                            { className: 'card-title' },
-	                            'Todays Activity - 12/10/16'
+	                            'div',
+	                            { className: 'card grey lighten-5' },
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'card-content', id: 'mainSet' },
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'card-title' },
+	                                    'Todays Activity - 12/10/16'
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'div',
+	                                { className: 'card-action' },
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { href: '#' },
+	                                    'Details'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { href: '#' },
+	                                    'Share'
+	                                )
+	                            )
+	                        ),
+	                        _react2.default.createElement(
+	                            'div',
+	                            { id: 'tooltip', className: 'hidden' },
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'strong',
+	                                    null,
+	                                    'Project: '
+	                                ),
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { id: 'value' },
+	                                    '100'
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'p',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'strong',
+	                                    null,
+	                                    'Duration: '
+	                                ),
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { id: 'duration' },
+	                                    '100'
+	                                ),
+	                                ' mins'
+	                            )
 	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'card-action' },
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#' },
-	                            'Details'
-	                        ),
-	                        _react2.default.createElement(
-	                            'a',
-	                            { href: '#' },
-	                            'Share'
-	                        )
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'tooltip', className: 'hidden' },
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'strong',
-	                            null,
-	                            'Project: '
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { id: 'value' },
-	                            '100'
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'strong',
-	                            null,
-	                            'Duration: '
-	                        ),
-	                        _react2.default.createElement(
-	                            'span',
-	                            { id: 'duration' },
-	                            '100'
-	                        ),
-	                        ' mins'
 	                    )
 	                )
-	            )
-	        )
+	            );
+	        }
+	    }]);
+	
+	    return SingleGraph;
+	}(_react2.default.Component);
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	var mapProps = function mapProps(state) {
+	    return {
+	        codeData: state.codeData
+	    };
+	};
+	var mapDispatch = null;
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(SingleGraph);
+
+/***/ },
+/* 282 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(178);
+	
+	var _reactRouter = __webpack_require__(228);
+	
+	var _store = __webpack_require__(216);
+	
+	var _store2 = _interopRequireDefault(_store);
+	
+	var _Root = __webpack_require__(226);
+	
+	var _Root2 = _interopRequireDefault(_Root);
+	
+	var _codeData = __webpack_require__(225);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	// Required packages
+	var Routes = function Routes(_ref) {
+	    var fetchInitialData = _ref.fetchInitialData;
+	    return _react2.default.createElement(
+	        _reactRouter.Router,
+	        { history: _reactRouter.browserHistory },
+	        _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Root2.default, onEnter: fetchInitialData })
 	    );
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = null;
-	var mapDispatch = null;
+	// -- Functions
 	
-	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(SingleGraph);
+	
+	// Required files
+	var mapProps = null;
+	
+	var mapDispatch = function mapDispatch(dispatch) {
+	    return {
+	        fetchInitialData: function fetchInitialData() {
+	            console.log('Fetching the data');
+	            dispatch((0, _codeData.fetchCodeData)());
+	        }
+	    };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Routes);
 
 /***/ }
 /******/ ]);

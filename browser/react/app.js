@@ -2,20 +2,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 
 // Required files
 import store from './store';
-import Root from './components/Root';
+import Routes from './Routes';
 
-// import Routes from './Routes'
 
+// Render to DOM
 ReactDOM.render(
   <Provider store={ store }>
-    <Router history={ browserHistory }>
-        <Route path="/" component={Root}>
-        </Route>
-    </Router>
+    <Routes />
   </Provider>,
   document.getElementById('app')
 );
