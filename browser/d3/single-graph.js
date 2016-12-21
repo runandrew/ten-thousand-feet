@@ -19,7 +19,7 @@ export const d3SingleGraph = () => {
 
     return {
 
-        create: function create (element, props, state) {
+        create: function (element, props, state) {
 
             // SVG Parameters
             const svgWidth = props.graphSettings.svgWidth;

@@ -16,7 +16,6 @@ const port = 8585;
 app.use(volleyball);
 
 app.get('/waka', (req, res, next) => {
-    console.log(req.query.date)
     wakatime.duration(req.query.date)
     .then(result => {
         res.send(result);
