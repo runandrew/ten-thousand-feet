@@ -24657,7 +24657,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.fetchCodeData = undefined;
+	exports.fetchCodeData7Days = exports.fetchCodeData = undefined;
 	exports.default = reducer;
 	
 	var _axios = __webpack_require__(284);
@@ -24701,8 +24701,40 @@
 	/* ------------       DISPATCHERS     ------------------ */
 	var fetchCodeData = exports.fetchCodeData = function fetchCodeData() {
 	    return function (dispatch) {
-	        return _axios2.default.get('/waka?date=2016-12-19').then(function (data) {
+	        return _axios2.default.get('/waka?date=2016-12-20').then(function (data) {
 	            dispatch(setDurationData(data.data));
+	        });
+	    };
+	};
+	
+	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
+	    return function (dispatch) {
+	        var oneDay = 24 * 60 * 60 * 1000;
+	        var today = new Date();
+	        var dates = [];
+	        for (var i = 0; i < 7; i++) {
+	            dates.push(today - oneDay * i);
+	        }
+	
+	        var mappedDates = dates.map(function (date) {
+	            return new Date(date);
+	        });
+	
+	        function convertDate(date) {
+	            var localDateSplit = date.toLocaleDateString().split('/');
+	            return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
+	        }
+	        var convertedDates = mappedDates.map(convertDate);
+	
+	        var promiseArray = convertedDates.map(function (date) {
+	            return _axios2.default.get('/waka?date=' + date).then(function (returnedData) {
+	                return returnedData.data;
+	            });
+	        });
+	
+	        return Promise.all(promiseArray).then(function (data) {
+	            console.log(data);
+	            //dispatch(setDurationData(data.data));
 	        });
 	    };
 	};
@@ -29828,6 +29860,7 @@
 	        fetchInitialData: function fetchInitialData() {
 	            console.log('Fetching the data');
 	            dispatch((0, _codeData.fetchCodeData)());
+	            dispatch((0, _codeData.fetchCodeData7Days)());
 	        }
 	    };
 	};

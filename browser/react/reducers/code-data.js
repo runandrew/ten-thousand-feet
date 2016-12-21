@@ -29,9 +29,39 @@ export default function reducer (codeData = initialCodeData, action) {
 /* ------------       DISPATCHERS     ------------------ */
 export const fetchCodeData = () => {
     return dispatch => {
-        return axios.get('/waka?date=2016-12-19')
+        return axios.get('/waka?date=2016-12-20')
         .then(data => {
             dispatch(setDurationData(data.data));
+        });
+    };
+};
+
+export const fetchCodeData7Days = () => {
+    return dispatch => {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const today = new Date();
+        const dates = [];
+        for (let i = 0; i < 7; i++) {
+            dates.push(today - oneDay * i);
+        }
+
+        const mappedDates = dates.map(date => new Date(date));
+
+        function convertDate (date) {
+            const localDateSplit = date.toLocaleDateString().split('/');
+            return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
+        }
+        const convertedDates = mappedDates.map(convertDate);
+
+        const promiseArray = convertedDates.map(date => {
+            return axios.get(`/waka?date=${date}`)
+            .then(returnedData => returnedData.data);
+        });
+
+        return Promise.all(promiseArray)
+        .then(data => {
+            console.log(data);
+            //dispatch(setDurationData(data.data));
         });
     };
 };

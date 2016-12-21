@@ -7,7 +7,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import store from './store';
 import Root from './components/Root';
 // -- Functions
-import { fetchCodeData } from './reducers/code-data';
+import { fetchCodeData, fetchCodeData7Days } from './reducers/code-data';
 
 /* -----------------    COMPONENT     ------------------ */
 const Routes = ({ fetchInitialData }) => (
@@ -25,7 +25,7 @@ const mapDispatch = dispatch => ({
  fetchInitialData: () => {
     console.log('Fetching the data');
     dispatch(fetchCodeData());
-
+    dispatch(fetchCodeData7Days());
   }
 });
 
