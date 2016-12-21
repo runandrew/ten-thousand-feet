@@ -60,7 +60,8 @@ SingleGraph.propTypes = {
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapProps = (state) => {
+const mapProps = (state, ownProps) => {
+    console.log(ownProps);
     return {
         durationData: state.codeData.durationData,
         graphSettings

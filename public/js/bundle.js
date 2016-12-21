@@ -24763,15 +24763,20 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* -----------------    COMPONENT     ------------------ */
+	
 	// Required files
 	exports.default = function () {
 	    return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_Navbar2.default, null),
-	        _react2.default.createElement(_SingleGraph2.default, null)
+	        _react2.default.createElement(_SingleGraph2.default, { dayIndex: 0 })
 	    );
-	}; // Required packages
+	};
+	
+	/* -----------------    CONTAINER     ------------------ */
+	// Required packages
 
 /***/ },
 /* 227 */
@@ -29796,7 +29801,8 @@
 	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = function mapProps(state) {
+	var mapProps = function mapProps(state, ownProps) {
+	    console.log(ownProps);
 	    return {
 	        durationData: state.codeData.durationData,
 	        graphSettings: _singleGraph.graphSettings
