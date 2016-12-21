@@ -5,7 +5,7 @@ const SET_DATA = 'SET_DATA';
 const setData = data => ({ type: SET_DATA, data });
 
 /* ------------       REDUCER     ------------------ */
-export default function reducer (durationData = [], action) {
+export default function reducer (durationData = {}, action) {
     switch (action.type) {
         case SET_DATA:
             return {

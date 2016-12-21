@@ -24668,7 +24668,7 @@
 	
 	/* ------------       REDUCER     ------------------ */
 	function reducer() {
-	  var durationData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	  var durationData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	  var action = arguments[1];
 	
 	  switch (action.type) {
@@ -29951,7 +29951,7 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
-	var _reactRouter = __webpack_require__(228);
+	var _singleGraph = __webpack_require__(283);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -29960,6 +29960,19 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global d3 */
+	
+	// /* -----------------    CONSTANTS     ------------------ */
+	// const graphSettings = {
+	//
+	//     // SVG
+	//     svgWidth: 900,
+	//     svgHeight: 250,
+	//     padding: 30,
+	//
+	//     // Colors
+	//     codeDark: '#e65100',
+	//     codeLight: '#ffb74d'
+	// };
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
@@ -29975,70 +29988,12 @@
 	    _createClass(SingleGraph, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var activity = this.props.codeData.durationData.data;
-	            // SVG Parameters
-	            var svgWidth = 900;
-	            var svgHeight = 250;
-	            var padding = 30;
-	
-	            // Colors
-	            var codeDark = '#e65100';
-	            var codeLight = '#ffb74d';
-	
-	            // Create SVG
-	            var svg = d3.select('#mainSet').append('svg').attr('width', svgWidth).attr('height', svgHeight);
-	
-	            // Scaling
-	            var xScale = d3.scaleTime().domain([new Date(2016, 11, 10, 6), new Date(2016, 11, 10, 24)]).range([0 + padding, svgWidth - padding * 2]);
-	
-	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
-	
-	            var xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour.every(1));
-	
-	            var yAxis = d3.axisLeft().scale(yScale).ticks(5);
-	
-	            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (svgHeight - padding) + ')').call(xAxis);
-	
-	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + padding + ', 0)').call(yAxis);
-	
-	            svg.append('g').attr('id', 'bars').selectAll('rect').data(activity).enter().append('rect').attr('x', function (data) {
-	                return xScale(convertSToDate(data.time));
-	            }).attr('y', function (data) {
-	                return yScale(5);
-	            }).attr('width', function (data) {
-	                return xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time));
-	            }).attr('height', function (data) {
-	                return svgHeight - yScale(5) - padding;
-	            }).attr('fill', codeDark).on('mouseover', function (data) {
-	
-	                d3.select(this).transition().duration(250).attr('fill', codeLight);
-	
-	                //Get this bar's x/y values, then augment for the tooltip
-	                var xPosition = parseFloat(d3.select(this).attr('x'));
-	                var yPosition = parseFloat(d3.select(this).attr('y'));
-	
-	                //Update the tooltip position and value
-	                d3.select('#tooltip').style('left', xPosition + 125 + 'px').style('top', yPosition + 50 + 'px').select('#value').text(data.project);
-	
-	                d3.select('#duration').text(Math.round(data.duration / 60));
-	
-	                //Show the tooltip
-	                d3.select('#tooltip').classed('hidden', false);
-	            }).on('mouseout', function (data) {
-	                d3.select(this).transition().duration(250).attr('fill', codeDark);
-	
-	                d3.select('#tooltip').classed('hidden', true);
-	            });
-	
-	            function convertSToDate(timeS) {
-	                return new Date(timeS * 1000);
-	            }
+	            var graph = (0, _singleGraph.d3SingleGraph)();
+	            graph.create('#mainSet', { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData });
 	        }
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            console.log('these are the props', this.props);
-	
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'section no-pad-bot', id: 'graph' },
@@ -30117,11 +30072,20 @@
 	    return SingleGraph;
 	}(_react2.default.Component);
 	
+	// PropType validaiton
+	
+	
+	SingleGraph.propTypes = {
+	    durationData: _react2.default.PropTypes.object,
+	    graphSettings: _react2.default.PropTypes.object
+	};
+	
 	/* -----------------    CONTAINER     ------------------ */
 	
 	var mapProps = function mapProps(state) {
 	    return {
-	        codeData: state.codeData
+	        durationData: state.codeData.durationData,
+	        graphSettings: _singleGraph.graphSettings
 	    };
 	};
 	var mapDispatch = null;
@@ -30187,6 +30151,156 @@
 	};
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Routes);
+
+/***/ },
+/* 283 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/* global d3*/
+	
+	/* -----------------    CONSTANTS     ------------------ */
+	var graphSettings = exports.graphSettings = {
+	
+	    // SVG
+	    svgWidth: 900,
+	    svgHeight: 250,
+	    padding: 30,
+	
+	    // Colors
+	    codeDark: '#e65100',
+	    codeLight: '#ffb74d'
+	};
+	
+	/* -----------------    LOGIC     ------------------ */
+	
+	var d3SingleGraph = exports.d3SingleGraph = function d3SingleGraph() {
+	
+	    return {
+	
+	        create: function create(element, props, state) {
+	
+	            // SVG Parameters
+	            var svgWidth = props.graphSettings.svgWidth;
+	            var svgHeight = props.graphSettings.svgHeight;
+	            var padding = props.graphSettings.padding;
+	
+	            // Create SVG
+	            var svg = d3.select(element).append('svg').attr('width', svgWidth).attr('height', svgHeight);
+	
+	            // Create Scales
+	            var _scales = this._scales({
+	                graphSettings: props.graphSettings
+	            });
+	
+	            // Create Axes
+	
+	            var _createAxes = this._createAxes({ _scales: _scales }),
+	                xAxis = _createAxes.xAxis,
+	                yAxis = _createAxes.yAxis;
+	
+	            // Append Axes
+	
+	
+	            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (svgHeight - padding) + ')').call(xAxis);
+	
+	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + padding + ', 0)').call(yAxis);
+	
+	            // Update Data Points
+	            this.update(svg, {
+	                _scales: _scales,
+	                graphSettings: props.graphSettings
+	            }, state);
+	
+	            // Send back the SVG
+	            return { svg: svg };
+	        },
+	
+	        _scales: function _scales(props) {
+	
+	            // SVG Parameters
+	            var svgWidth = props.graphSettings.svgWidth;
+	            var svgHeight = props.graphSettings.svgHeight;
+	            var padding = props.graphSettings.padding;
+	
+	            // Scaling
+	            var xScale = d3.scaleTime().domain([new Date(2016, 11, 10, 6), new Date(2016, 11, 10, 24)]).range([0 + padding, svgWidth - padding * 2]);
+	
+	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
+	
+	            return { xScale: xScale, yScale: yScale };
+	        },
+	
+	        _createAxes: function _createAxes(props) {
+	
+	            var xScale = props._scales.xScale;
+	            var yScale = props._scales.yScale;
+	
+	            // Axis creation
+	            var xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour.every(1));
+	
+	            var yAxis = d3.axisLeft().scale(yScale).ticks(5);
+	
+	            return { xAxis: xAxis, yAxis: yAxis };
+	        },
+	
+	        update: function update(svg, props, state) {
+	
+	            // SVG Parameters
+	            var svgHeight = props.graphSettings.svgHeight;
+	            var padding = props.graphSettings.padding;
+	
+	            // Scales
+	            var xScale = props._scales.xScale;
+	            var yScale = props._scales.yScale;
+	
+	            // Colors
+	            var codeDark = props.graphSettings.codeDark;
+	            var codeLight = props.graphSettings.codeLight;
+	
+	            // Data
+	            var activity = state.durationData.data;
+	
+	            svg.append('g').attr('id', 'bars').selectAll('rect').data(activity).enter().append('rect').attr('x', function (data) {
+	                return xScale(convertSToDate(data.time));
+	            }).attr('y', function () {
+	                return yScale(5);
+	            }).attr('width', function (data) {
+	                return xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time));
+	            }).attr('height', function () {
+	                return svgHeight - yScale(5) - padding;
+	            }).attr('fill', codeDark).on('mouseover', function (data) {
+	
+	                d3.select(this).transition().duration(250).attr('fill', codeLight);
+	
+	                //Get this bar's x/y values, then augment for the tooltip
+	                var xPosition = parseFloat(d3.select(this).attr('x'));
+	                var yPosition = parseFloat(d3.select(this).attr('y'));
+	
+	                //Update the tooltip position and value
+	                d3.select('#tooltip').style('left', xPosition + 125 + 'px').style('top', yPosition + 50 + 'px').select('#value').text(data.project);
+	
+	                d3.select('#duration').text(Math.round(data.duration / 60));
+	
+	                //Show the tooltip
+	                d3.select('#tooltip').classed('hidden', false);
+	            }).on('mouseout', function () {
+	                d3.select(this).transition().duration(250).attr('fill', codeDark);
+	
+	                d3.select('#tooltip').classed('hidden', true);
+	            });
+	
+	            function convertSToDate(timeS) {
+	                return new Date(timeS * 1000);
+	            }
+	        }
+	
+	    };
+	};
 
 /***/ }
 /******/ ]);
