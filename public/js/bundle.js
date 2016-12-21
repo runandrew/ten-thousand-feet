@@ -24727,7 +24727,7 @@
 	        var convertedDates = mappedDates.map(convertDate);
 	
 	        var promiseArray = convertedDates.map(function (date) {
-	            return _axios2.default.get('/waka?date=' + date).then(function (returnedData) {
+	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
 	                return returnedData.data;
 	            }).catch(console.error);
 	        });

@@ -54,7 +54,7 @@ export const fetchCodeData7Days = () => {
         const convertedDates = mappedDates.map(convertDate);
 
         const promiseArray = convertedDates.map(date => {
-            return axios.get(`/waka?date=${date}`)
+            return axios.get(`/api/wakatime/durations?date=${date}`)
             .then(returnedData => returnedData.data)
             .catch(console.error);
         });
