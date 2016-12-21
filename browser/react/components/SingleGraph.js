@@ -5,26 +5,29 @@ import { connect } from 'react-redux';
 
 import { graphSettings, d3SingleGraph } from '../../d3/single-graph';
 
-// /* -----------------    CONSTANTS     ------------------ */
-// const graphSettings = {
-//
-//     // SVG
-//     svgWidth: 900,
-//     svgHeight: 250,
-//     padding: 30,
-//
-//     // Colors
-//     codeDark: '#e65100',
-//     codeLight: '#ffb74d'
-// };
-
 /* -----------------    COMPONENT     ------------------ */
 
 class SingleGraph extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            svg: null,
+            _scales: null
+        };
+
+        this.graph  = d3SingleGraph();
+    }
 
     componentDidMount() {
-        const graph = d3SingleGraph();
-        graph.create('#mainSet', { graphSettings }, { durationData: this.props.durationData });
+        const { svg, _scales } = this.graph.create('#mainSet', { graphSettings }, { durationData: this.props.durationData });
+        this.setState({
+            svg: svg,
+            _scales: _scales
+        });
+    }
+
+    componentDidUpdate() {
+        this.graph.update(this.state.svg, { graphSettings }, { durationData: this.props.durationData });
     }
 
     render() {

@@ -58,7 +58,10 @@ export const d3SingleGraph = () => {
             }, state);
 
             // Send back the SVG
-            return { svg };
+            return {
+                svg,
+                _scales
+            };
         },
 
         _scales: function (props) {
@@ -98,14 +101,24 @@ export const d3SingleGraph = () => {
         },
 
         update: function (svg, props, state) {
-
+            
             // SVG Parameters
             const svgHeight = props.graphSettings.svgHeight;
             const padding = props.graphSettings.padding;
 
             // Scales
-            const xScale = props._scales.xScale;
-            const yScale = props._scales.yScale;
+            // const xScale = props._scales.xScale;
+            // const yScale = props._scales.yScale;
+
+            // Create Scales
+            const _scales = this._scales({
+                graphSettings: props.graphSettings,
+            });
+
+            const { xScale, yScale } = _scales;
+
+            // Create Axes
+            const { xAxis, yAxis } = this._createAxes({ _scales });
 
             // Colors
             const codeDark = props.graphSettings.codeDark;
