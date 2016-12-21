@@ -10,10 +10,10 @@ const setDurationData = data => ({ type: SET_DATA, data });
 /* ------------       REDUCER     ------------------ */
 
 const initialCodeData = {
-    durationData: {
+    durationData: [{
         data: [],
         start: '2016-12-10T05:00:00Z'
-    }
+    }]
 };
 
 export default function reducer (codeData = initialCodeData, action) {
@@ -54,14 +54,15 @@ export const fetchCodeData7Days = () => {
         const convertedDates = mappedDates.map(convertDate);
 
         const promiseArray = convertedDates.map(date => {
-            return axios.get(`/waka?date=${date}`)
-            .then(returnedData => returnedData.data);
+            return axios.get(`/api/wakatime/durations?date=${date}`)
+            .then(returnedData => returnedData.data)
+            .catch(console.error);
         });
 
         return Promise.all(promiseArray)
         .then(data => {
-            console.log(data);
-            //dispatch(setDurationData(data.data));
-        });
+            dispatch(setDurationData(data));
+        })
+        .catch(console.error);
     };
 };

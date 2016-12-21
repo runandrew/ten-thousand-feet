@@ -5,7 +5,8 @@ const express = require('express');
 const path = require('path');
 const volleyball = require('volleyball');
 
-const wakatime = require('./api/wakatime/interface.js')('3cefa018-fe33-4b4c-af90-7bfed6b75e72');
+// Required files
+const routerApi = require('./api/routes');
 
 // App creation
 const app = express();
@@ -15,13 +16,8 @@ const port = 8585;
 // Logging
 app.use(volleyball);
 
-app.get('/waka', (req, res, next) => {
-    wakatime.duration(req.query.date)
-    .then(result => {
-        res.send(result);
-    })
-    .catch(err => console.error(err));
-});
+// Routers
+app.use('/api', routerApi);
 
 // Static file serving
 app.use('/', express.static(path.join(__dirname, '/public')));
