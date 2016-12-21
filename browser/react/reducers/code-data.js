@@ -55,12 +55,14 @@ export const fetchCodeData7Days = () => {
 
         const promiseArray = convertedDates.map(date => {
             return axios.get(`/waka?date=${date}`)
-            .then(returnedData => returnedData.data);
+            .then(returnedData => returnedData.data)
+            .catch(console.error);
         });
 
         return Promise.all(promiseArray)
         .then(data => {
-            dispatch(setDurationData(data))
-        });
+            dispatch(setDurationData(data));
+        })
+        .catch(console.error);
     };
 };

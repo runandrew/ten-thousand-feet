@@ -1,4 +1,3 @@
-/* global d3 */
 
 // Required packages
 import React from 'react';
@@ -21,7 +20,7 @@ class SingleGraph extends React.Component {
     }
 
     componentDidMount() {
-        const { svg, _scales, _axes } = this.graph.create(
+        const { svg } = this.graph.create(
             `#graph-${this.props.dayIndex}`,
             { graphSettings },
             { durationData: this.props.durationData }
@@ -81,7 +80,8 @@ class SingleGraph extends React.Component {
 // PropType validaiton
 SingleGraph.propTypes = {
     durationData: React.PropTypes.object,
-    graphSettings: React.PropTypes.object
+    graphSettings: React.PropTypes.object,
+    dayIndex: React.PropTypes.number
 };
 
 /* -----------------    CONTAINER     ------------------ */

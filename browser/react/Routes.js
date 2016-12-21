@@ -1,13 +1,13 @@
+
 // Required packages
 import React from 'react';
 import { connect } from 'react-redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, browserHistory } from 'react-router';
 
 // Required files
-import store from './store';
 import Root from './components/Root';
 // -- Functions
-import { fetchCodeData, fetchCodeData7Days } from './reducers/code-data';
+import { fetchCodeData7Days } from './reducers/code-data';
 
 /* -----------------    COMPONENT     ------------------ */
 const Routes = ({ fetchInitialData }) => (
@@ -17,6 +17,11 @@ const Routes = ({ fetchInitialData }) => (
     </Router>
 );
 
+// PropType validaiton
+Routes.propTypes = {
+    fetchInitialData: React.PropTypes.func,
+};
+
 /* -----------------    CONTAINER     ------------------ */
 
 const mapProps = null;
@@ -24,7 +29,6 @@ const mapProps = null;
 const mapDispatch = dispatch => ({
  fetchInitialData: () => {
     console.log('Fetching the data');
-    // dispatch(fetchCodeData());
     dispatch(fetchCodeData7Days());
   }
 });
