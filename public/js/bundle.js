@@ -24679,7 +24679,8 @@
 	
 	var initialCodeData = {
 	    durationData: {
-	        data: []
+	        data: [],
+	        start: '2016-12-10T05:00:00Z'
 	    }
 	};
 	
@@ -24700,7 +24701,7 @@
 	/* ------------       DISPATCHERS     ------------------ */
 	var fetchCodeData = exports.fetchCodeData = function fetchCodeData() {
 	    return function (dispatch) {
-	        return _axios2.default.get('/js/durationData.json').then(function (data) {
+	        return _axios2.default.get('/waka?date=2016-12-19').then(function (data) {
 	            dispatch(setDurationData(data.data));
 	        });
 	    };
@@ -29652,8 +29653,7 @@
 	        var _this = _possibleConstructorReturn(this, (SingleGraph.__proto__ || Object.getPrototypeOf(SingleGraph)).call(this, props));
 	
 	        _this.state = {
-	            svg: null,
-	            _scales: null
+	            svg: null
 	        };
 	
 	        _this.graph = (0, _singleGraph.d3SingleGraph)();
@@ -29664,13 +29664,9 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var _graph$create = this.graph.create('#mainSet', { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData }),
-	                svg = _graph$create.svg,
-	                _scales = _graph$create._scales;
+	                svg = _graph$create.svg;
 	
-	            this.setState({
-	                svg: svg,
-	                _scales: _scales
-	            });
+	            this.setState({ svg: svg });
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
@@ -29847,6 +29843,9 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+	
 	/* global d3*/
 	
 	/* -----------------    CONSTANTS     ------------------ */
@@ -29881,7 +29880,7 @@
 	            // Create Scales
 	            var _scales = this._scales({
 	                graphSettings: props.graphSettings
-	            });
+	            }, state);
 	
 	            // Create Axes
 	
@@ -29909,15 +29908,26 @@
 	            };
 	        },
 	
-	        _scales: function _scales(props) {
+	        _scales: function _scales(props, state) {
+	
+	            // Destructure the day string
+	            var _state$durationData$s = state.durationData.start.split('T')[0].split('-').map(function (str) {
+	                return +str;
+	            }),
+	                _state$durationData$s2 = _slicedToArray(_state$durationData$s, 3),
+	                year = _state$durationData$s2[0],
+	                month = _state$durationData$s2[1],
+	                day = _state$durationData$s2[2];
 	
 	            // SVG Parameters
+	
+	
 	            var svgWidth = props.graphSettings.svgWidth;
 	            var svgHeight = props.graphSettings.svgHeight;
 	            var padding = props.graphSettings.padding;
 	
 	            // Scaling
-	            var xScale = d3.scaleTime().domain([new Date(2016, 11, 10, 6), new Date(2016, 11, 10, 24)]).range([0 + padding, svgWidth - padding * 2]);
+	            var xScale = d3.scaleTime().domain([new Date(year, month - 1, day, 6), new Date(year, month - 1, day, 24)]).range([0 + padding, svgWidth - padding * 2]);
 	
 	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
 	
@@ -29950,20 +29960,16 @@
 	            // Create Scales
 	            var _scales = this._scales({
 	                graphSettings: props.graphSettings
-	            });
+	            }, state);
 	
 	            var xScale = _scales.xScale,
 	                yScale = _scales.yScale;
 	
 	            // Create Axes
 	
-	            var _createAxes2 = this._createAxes({ _scales: _scales }),
-	                xAxis = _createAxes2.xAxis,
-	                yAxis = _createAxes2.yAxis;
+	            this._createAxes({ _scales: _scales });
 	
 	            // Colors
-	
-	
 	            var codeDark = props.graphSettings.codeDark;
 	            var codeLight = props.graphSettings.codeLight;
 	

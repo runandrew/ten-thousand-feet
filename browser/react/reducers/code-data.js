@@ -11,9 +11,10 @@ const setDurationData = data => ({ type: SET_DATA, data });
 
 const initialCodeData = {
     durationData: {
-        data: []
+        data: [],
+        start: '2016-12-10T05:00:00Z'
     }
-}
+};
 
 export default function reducer (codeData = initialCodeData, action) {
     switch (action.type) {
@@ -28,7 +29,7 @@ export default function reducer (codeData = initialCodeData, action) {
 /* ------------       DISPATCHERS     ------------------ */
 export const fetchCodeData = () => {
     return dispatch => {
-        return axios.get('/js/durationData.json')
+        return axios.get('/waka?date=2016-12-19')
         .then(data => {
             dispatch(setDurationData(data.data));
         });

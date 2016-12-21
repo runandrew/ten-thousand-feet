@@ -1,5 +1,6 @@
 /* global d3 */
 
+
 import React from 'react';
 import { connect } from 'react-redux';
 
@@ -11,19 +12,15 @@ class SingleGraph extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            svg: null,
-            _scales: null
+            svg: null
         };
 
         this.graph  = d3SingleGraph();
     }
 
     componentDidMount() {
-        const { svg, _scales } = this.graph.create('#mainSet', { graphSettings }, { durationData: this.props.durationData });
-        this.setState({
-            svg: svg,
-            _scales: _scales
-        });
+        const { svg } = this.graph.create('#mainSet', { graphSettings }, { durationData: this.props.durationData });
+        this.setState({ svg });
     }
 
     componentDidUpdate() {

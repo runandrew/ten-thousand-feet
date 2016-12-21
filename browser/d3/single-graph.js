@@ -35,7 +35,7 @@ export const d3SingleGraph = () => {
             // Create Scales
             const _scales = this._scales({
                 graphSettings: props.graphSettings,
-            });
+            }, state);
 
             // Create Axes
             const { xAxis, yAxis } = this._createAxes({ _scales });
@@ -64,7 +64,10 @@ export const d3SingleGraph = () => {
             };
         },
 
-        _scales: function (props) {
+        _scales: function (props, state) {
+
+            // Destructure the day string
+            const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
 
             // SVG Parameters
             const svgWidth = props.graphSettings.svgWidth;
@@ -73,7 +76,7 @@ export const d3SingleGraph = () => {
 
             // Scaling
             const xScale = d3.scaleTime()
-            .domain([new Date(2016, 11, 10, 6), new Date(2016, 11, 10, 24)])
+            .domain([new Date(year, month - 1, day, 6), new Date(year, month - 1, day, 24)])
             .range([0 + padding, svgWidth - padding * 2]);
 
             const yScale = d3.scaleLinear()
@@ -101,7 +104,7 @@ export const d3SingleGraph = () => {
         },
 
         update: function (svg, props, state) {
-            
+
             // SVG Parameters
             const svgHeight = props.graphSettings.svgHeight;
             const padding = props.graphSettings.padding;
@@ -113,12 +116,12 @@ export const d3SingleGraph = () => {
             // Create Scales
             const _scales = this._scales({
                 graphSettings: props.graphSettings,
-            });
+            }, state);
 
             const { xScale, yScale } = _scales;
 
             // Create Axes
-            const { xAxis, yAxis } = this._createAxes({ _scales });
+            this._createAxes({ _scales });
 
             // Colors
             const codeDark = props.graphSettings.codeDark;
