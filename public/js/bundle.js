@@ -24678,10 +24678,10 @@
 	/* ------------       REDUCER     ------------------ */
 	
 	var initialCodeData = {
-	    durationData: {
+	    durationData: [{
 	        data: [],
 	        start: '2016-12-10T05:00:00Z'
-	    }
+	    }]
 	};
 	
 	function reducer() {
@@ -24733,8 +24733,7 @@
 	        });
 	
 	        return Promise.all(promiseArray).then(function (data) {
-	            console.log(data);
-	            //dispatch(setDurationData(data.data));
+	            dispatch(setDurationData(data));
 	        });
 	    };
 	};
@@ -24757,9 +24756,9 @@
 	
 	var _Navbar2 = _interopRequireDefault(_Navbar);
 	
-	var _SingleGraph = __webpack_require__(281);
+	var _Graphs = __webpack_require__(350);
 	
-	var _SingleGraph2 = _interopRequireDefault(_SingleGraph);
+	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -24771,7 +24770,7 @@
 	        'div',
 	        null,
 	        _react2.default.createElement(_Navbar2.default, null),
-	        _react2.default.createElement(_SingleGraph2.default, { dayIndex: 0 })
+	        _react2.default.createElement(_Graphs2.default, null)
 	    );
 	};
 	
@@ -29671,6 +29670,8 @@
 	
 	var _singleGraph = __webpack_require__(283);
 	
+	var _utils = __webpack_require__(351);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29678,6 +29679,12 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* global d3 */
+	
+	// Required packages
+	
+	
+	// Required files
+	
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
@@ -29700,10 +29707,14 @@
 	    _createClass(SingleGraph, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _graph$create = this.graph.create('#mainSet', { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData }),
-	                svg = _graph$create.svg;
+	            var _graph$create = this.graph.create('#graph-' + this.props.dayIndex, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData }),
+	                svg = _graph$create.svg,
+	                _scales = _graph$create._scales,
+	                _axes = _graph$create._axes;
 	
 	            this.setState({ svg: svg });
+	
+	            this.graph.update(svg, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData });
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
@@ -29711,11 +29722,23 @@
 	            this.graph.update(this.state.svg, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData });
 	        }
 	    }, {
+	        key: 'getCurrentDay',
+	        value: function getCurrentDay() {
+	            var UTCday = (0, _utils.dateStrToUTC)(this.props.durationData.start);
+	            return (0, _utils.dateUTCToDayStr)(UTCday);
+	        }
+	    }, {
+	        key: 'getCurrentLocalDate',
+	        value: function getCurrentLocalDate() {
+	            var UTCday = (0, _utils.dateStrToUTC)(this.props.durationData.start);
+	            return UTCday.toLocaleDateString();
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'section no-pad-bot', id: 'graph' },
+	                { className: 'section no-pad-bot graphContainer', id: 'graphContainer-' + this.props.dayIndex },
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'container' },
@@ -29731,8 +29754,11 @@
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    { className: 'card-title' },
-	                                    'Todays Activity - 12/10/16'
-	                                )
+	                                    this.getCurrentDay(),
+	                                    ' Activity - ',
+	                                    this.getCurrentLocalDate()
+	                                ),
+	                                _react2.default.createElement('div', { id: 'graph-' + this.props.dayIndex })
 	                            ),
 	                            _react2.default.createElement(
 	                                'div',
@@ -29802,10 +29828,10 @@
 	/* -----------------    CONTAINER     ------------------ */
 	
 	var mapProps = function mapProps(state, ownProps) {
-	    console.log(ownProps);
 	    return {
-	        durationData: state.codeData.durationData,
-	        graphSettings: _singleGraph.graphSettings
+	        durationData: state.codeData.durationData[ownProps.dayIndex],
+	        graphSettings: _singleGraph.graphSettings,
+	        dayIndex: ownProps.dayIndex
 	    };
 	};
 	var mapDispatch = null;
@@ -29865,7 +29891,7 @@
 	    return {
 	        fetchInitialData: function fetchInitialData() {
 	            console.log('Fetching the data');
-	            dispatch((0, _codeData.fetchCodeData)());
+	            // dispatch(fetchCodeData());
 	            dispatch((0, _codeData.fetchCodeData7Days)());
 	        }
 	    };
@@ -29922,28 +29948,21 @@
 	            }, state);
 	
 	            // Create Axes
-	
-	            var _createAxes = this._createAxes({ _scales: _scales }),
-	                xAxis = _createAxes.xAxis,
-	                yAxis = _createAxes.yAxis;
+	            var _axes = this._createAxes({ _scales: _scales });
+	            var xAxis = _axes.xAxis,
+	                yAxis = _axes.yAxis;
 	
 	            // Append Axes
-	
 	
 	            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (svgHeight - padding) + ')').call(xAxis);
 	
 	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + padding + ', 0)').call(yAxis);
 	
-	            // Update Data Points
-	            this.update(svg, {
-	                _scales: _scales,
-	                graphSettings: props.graphSettings
-	            }, state);
-	
 	            // Send back the SVG
 	            return {
 	                svg: svg,
-	                _scales: _scales
+	                _scales: _scales,
+	                _axes: _axes
 	            };
 	        },
 	
@@ -29987,26 +30006,29 @@
 	        },
 	
 	        update: function update(svg, props, state) {
-	
 	            // SVG Parameters
 	            var svgHeight = props.graphSettings.svgHeight;
 	            var padding = props.graphSettings.padding;
-	
-	            // Scales
-	            // const xScale = props._scales.xScale;
-	            // const yScale = props._scales.yScale;
 	
 	            // Create Scales
 	            var _scales = this._scales({
 	                graphSettings: props.graphSettings
 	            }, state);
-	
 	            var xScale = _scales.xScale,
 	                yScale = _scales.yScale;
 	
 	            // Create Axes
 	
-	            this._createAxes({ _scales: _scales });
+	            var _createAxes2 = this._createAxes({ _scales: _scales }),
+	                xAxis = _createAxes2.xAxis,
+	                yAxis = _createAxes2.yAxis;
+	
+	            // Update Axes
+	
+	
+	            svg.select('.x.axis').call(xAxis);
+	
+	            svg.select('.y.axis').call(yAxis);
 	
 	            // Colors
 	            var codeDark = props.graphSettings.codeDark;
@@ -31540,6 +31562,115 @@
 	  };
 	};
 
+
+/***/ },
+/* 309 */,
+/* 310 */,
+/* 311 */,
+/* 312 */,
+/* 313 */,
+/* 314 */,
+/* 315 */,
+/* 316 */,
+/* 317 */,
+/* 318 */,
+/* 319 */,
+/* 320 */,
+/* 321 */,
+/* 322 */,
+/* 323 */,
+/* 324 */,
+/* 325 */,
+/* 326 */,
+/* 327 */,
+/* 328 */,
+/* 329 */,
+/* 330 */,
+/* 331 */,
+/* 332 */,
+/* 333 */,
+/* 334 */,
+/* 335 */,
+/* 336 */,
+/* 337 */,
+/* 338 */,
+/* 339 */,
+/* 340 */,
+/* 341 */,
+/* 342 */,
+/* 343 */,
+/* 344 */,
+/* 345 */,
+/* 346 */,
+/* 347 */,
+/* 348 */,
+/* 349 */,
+/* 350 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(178);
+	
+	var _SingleGraph = __webpack_require__(281);
+	
+	var _SingleGraph2 = _interopRequireDefault(_SingleGraph);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	var Graphs = function Graphs(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        props.durationData.map(function (day, i) {
+	            return _react2.default.createElement(_SingleGraph2.default, { dayIndex: i, key: i });
+	        })
+	    );
+	};
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	// Required files
+	// Required libraries
+	var mapProps = function mapProps(state, ownProps) {
+	    return {
+	        durationData: state.codeData.durationData
+	    };
+	};
+	var mapDispatch = null;
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Graphs);
+
+/***/ },
+/* 351 */
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// Utility functions
+	
+	var dateStrToUTC = exports.dateStrToUTC = function dateStrToUTC(dateStr) {
+	    return new Date(dateStr);
+	};
+	
+	var dateUTCToDayStr = exports.dateUTCToDayStr = function dateUTCToDayStr(UTCdate) {
+	    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+	    var day = UTCdate.getDay();
+	    return daysOfWeek[day];
+	};
 
 /***/ }
 /******/ ]);

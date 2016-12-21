@@ -24,7 +24,7 @@ const mapProps = null;
 const mapDispatch = dispatch => ({
  fetchInitialData: () => {
     console.log('Fetching the data');
-    dispatch(fetchCodeData());
+    // dispatch(fetchCodeData());
     dispatch(fetchCodeData7Days());
   }
 });
