@@ -6,6 +6,9 @@ import { Router, Route, browserHistory } from 'react-router';
 
 // Required files
 import Root from './components/Root';
+import Auth from './components/Auth';
+import Graphs from './components/Graphs';
+
 // -- Functions
 import { fetchCodeData7Days } from './reducers/code-data';
 
@@ -13,6 +16,8 @@ import { fetchCodeData7Days } from './reducers/code-data';
 const Routes = ({ fetchInitialData }) => (
     <Router history={ browserHistory }>
         <Route path="/" component={Root} onEnter={ fetchInitialData }>
+            <Router path="/login" component={Auth} />
+            <Router path="/graphs" component={Graphs} />
         </Route>
     </Router>
 );

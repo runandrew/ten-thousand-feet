@@ -26249,6 +26249,14 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
+	var _Auth = __webpack_require__(311);
+	
+	var _Auth2 = _interopRequireDefault(_Auth);
+	
+	var _Graphs = __webpack_require__(307);
+	
+	var _Graphs2 = _interopRequireDefault(_Graphs);
+	
 	var _codeData = __webpack_require__(225);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -26262,11 +26270,17 @@
 	    return _react2.default.createElement(
 	        _reactRouter.Router,
 	        { history: _reactRouter.browserHistory },
-	        _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Root2.default, onEnter: fetchInitialData })
+	        _react2.default.createElement(
+	            _reactRouter.Route,
+	            { path: '/', component: _Root2.default, onEnter: fetchInitialData },
+	            _react2.default.createElement(_reactRouter.Router, { path: '/login', component: _Auth2.default }),
+	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default })
+	        )
 	    );
 	};
 	
 	// PropType validaiton
+	
 	
 	// -- Functions
 	
@@ -31108,17 +31122,17 @@
 	/* -----------------    COMPONENT     ------------------ */
 	
 	// Required files
-	exports.default = function () {
+	var Root = function Root(props) {
 	    return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_Navbar2.default, null),
-	        _react2.default.createElement(_Graphs2.default, null)
+	        props.children
 	    );
-	};
+	}; // Required packages
+	exports.default = Root;
 	
 	/* -----------------    CONTAINER     ------------------ */
-	// Required packages
 
 /***/ },
 /* 306 */
@@ -31136,6 +31150,8 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
+	var _reactRouter = __webpack_require__(252);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
@@ -31149,8 +31165,8 @@
 	            'div',
 	            { className: 'nav-wrapper container' },
 	            _react2.default.createElement(
-	                'a',
-	                { id: 'logo-container', href: '#', className: 'brand-logo' },
+	                _reactRouter.Link,
+	                { id: 'logo-container', to: '/', className: 'brand-logo' },
 	                _react2.default.createElement('img', { src: '/img/logo.png', width: '50px' }),
 	                '10,000 feet'
 	            ),
@@ -31161,9 +31177,27 @@
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        'a',
-	                        { href: '#' },
+	                        _reactRouter.Link,
+	                        { to: '/graphs' },
+	                        'Graphs'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/login' },
 	                        'Login'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: '/auth/logout' },
+	                        'Logout'
 	                    )
 	                )
 	            ),
@@ -31174,9 +31208,27 @@
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        'a',
-	                        { href: '#' },
+	                        _reactRouter.Link,
+	                        { to: '/graphs' },
+	                        'Graphs'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/login' },
 	                        'Login'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/auth/logout' },
+	                        'Logout'
 	                    )
 	                )
 	            ),
@@ -31628,6 +31680,89 @@
 	    var day = UTCdate.getDay();
 	    return daysOfWeek[day];
 	};
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(178);
+	
+	var _reactRouter = __webpack_require__(252);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	var Auth = function Auth() {
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	            'form',
+	            { className: 'col s4 offset-s4' },
+	            _react2.default.createElement(
+	                'h5',
+	                { className: 'center' },
+	                'Please enter your information'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'input-field col s12' },
+	                    _react2.default.createElement('input', { id: 'email', type: 'email', className: 'validate' }),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'email' },
+	                        'Email'
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'row' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'input-field col s12' },
+	                    _react2.default.createElement('input', { id: 'password', type: 'password', className: 'validate' }),
+	                    _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: 'password' },
+	                        'Password'
+	                    )
+	                )
+	            )
+	        ),
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'col s4 offset-s4' },
+	            _react2.default.createElement(
+	                'a',
+	                { href: '/auth/jawbone/', className: 'waves-effect waves-light btn' },
+	                'Sign in with UP'
+	            )
+	        )
+	    );
+	};
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	var mapProps = null;
+	var mapDispatch = null;
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
 
 /***/ }
 /******/ ]);
