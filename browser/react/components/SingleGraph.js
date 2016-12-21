@@ -28,16 +28,16 @@ class SingleGraph extends React.Component {
         );
 
         this.setState({ svg });
-        
+
         this.graph.update(svg,
-            { graphSettings },
+            { graphSettings, dayIndex: this.props.dayIndex },
             { durationData: this.props.durationData }
         );
     }
 
     componentDidUpdate() {
         this.graph.update(this.state.svg,
-            { graphSettings },
+            { graphSettings, dayIndex: this.props.dayIndex },
             { durationData: this.props.durationData }
             );
     }
@@ -59,7 +59,7 @@ class SingleGraph extends React.Component {
             <div className="row center">
             <div className="card grey lighten-5">
             <div className="card-content" id="mainSet">
-            <span className="card-title">{ this.getCurrentDay() } Activity - { this.getCurrentLocalDate() }</span>
+            <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.getCurrentLocalDate() }</span>
             <div id={`graph-${this.props.dayIndex}`} />
             </div>
             <div className="card-action">
@@ -67,9 +67,9 @@ class SingleGraph extends React.Component {
             <a href="#">Share</a>
             </div>
             </div>
-            <div id="tooltip" className="hidden">
-            <p><strong>Project: </strong><span id="value">100</span></p>
-            <p><strong>Duration: </strong><span id="duration">100</span> mins</p>
+            <div id={`tooltip-${this.props.dayIndex}`} className="hidden tooltip">
+            <p><strong>Project: </strong><span className="value">100</span></p>
+            <p><strong>Duration: </strong><span className="duration">100</span> mins</p>
             </div>
             </div>
             </div>

@@ -29714,12 +29714,12 @@
 	
 	            this.setState({ svg: svg });
 	
-	            this.graph.update(svg, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData });
+	            this.graph.update(svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { durationData: this.props.durationData });
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            this.graph.update(this.state.svg, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData });
+	            this.graph.update(this.state.svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { durationData: this.props.durationData });
 	        }
 	    }, {
 	        key: 'getCurrentDay',
@@ -29754,7 +29754,7 @@
 	                                _react2.default.createElement(
 	                                    'span',
 	                                    { className: 'card-title' },
-	                                    this.getCurrentDay(),
+	                                    this.props.dayIndex ? this.getCurrentDay() + '\'s' : "Today's",
 	                                    ' Activity - ',
 	                                    this.getCurrentLocalDate()
 	                                ),
@@ -29777,7 +29777,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'div',
-	                            { id: 'tooltip', className: 'hidden' },
+	                            { id: 'tooltip-' + this.props.dayIndex, className: 'hidden tooltip' },
 	                            _react2.default.createElement(
 	                                'p',
 	                                null,
@@ -29788,7 +29788,7 @@
 	                                ),
 	                                _react2.default.createElement(
 	                                    'span',
-	                                    { id: 'value' },
+	                                    { className: 'value' },
 	                                    '100'
 	                                )
 	                            ),
@@ -29802,7 +29802,7 @@
 	                                ),
 	                                _react2.default.createElement(
 	                                    'span',
-	                                    { id: 'duration' },
+	                                    { className: 'duration' },
 	                                    '100'
 	                                ),
 	                                ' mins'
@@ -30054,16 +30054,16 @@
 	                var yPosition = parseFloat(d3.select(this).attr('y'));
 	
 	                //Update the tooltip position and value
-	                d3.select('#tooltip').style('left', xPosition + 125 + 'px').style('top', yPosition + 50 + 'px').select('#value').text(data.project);
+	                d3.select('#tooltip-' + props.dayIndex).style('left', xPosition + 125 + 'px').style('top', yPosition + 50 + 'px').select('#tooltip-' + props.dayIndex + ' .value').text(data.project);
 	
-	                d3.select('#duration').text(Math.round(data.duration / 60));
+	                d3.select('#tooltip-' + props.dayIndex + ' .duration').text(Math.round(data.duration / 60));
 	
 	                //Show the tooltip
-	                d3.select('#tooltip').classed('hidden', false);
+	                d3.select('#tooltip-' + props.dayIndex).classed('hidden', false);
 	            }).on('mouseout', function () {
 	                d3.select(this).transition().duration(250).attr('fill', codeDark);
 	
-	                d3.select('#tooltip').classed('hidden', true);
+	                d3.select('#tooltip-' + props.dayIndex).classed('hidden', true);
 	            });
 	
 	            function convertSToDate(timeS) {

@@ -1,6 +1,6 @@
 /* Tooltip */
 
-#tooltip {
+.tooltip {
         position: absolute;
         width: 200px;
         height: auto;
@@ -15,11 +15,11 @@
         pointer-events: none;
 }
 
-#tooltip.hidden {
+.tooltip.hidden {
         display: none;
 }
 
-#tooltip p {
+.tooltip p {
         margin: 0;
         font-size: 16px;
         line-height: 20px;

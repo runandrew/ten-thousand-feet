@@ -150,17 +150,17 @@ export const d3SingleGraph = () => {
                 const yPosition = parseFloat(d3.select(this).attr('y'));
 
                 //Update the tooltip position and value
-                d3.select('#tooltip')
+                d3.select(`#tooltip-${props.dayIndex}`)
                 .style('left', xPosition + 125 + 'px')
                 .style('top', yPosition + 50 + 'px')
-                .select('#value')
+                .select(`#tooltip-${props.dayIndex} .value`)
                 .text(data.project);
 
-                d3.select('#duration')
+                d3.select(`#tooltip-${props.dayIndex} .duration`)
                 .text(Math.round(data.duration / 60));
 
                 //Show the tooltip
-                d3.select('#tooltip').classed('hidden', false);
+                d3.select(`#tooltip-${props.dayIndex}`).classed('hidden', false);
 
             })
             .on('mouseout', function() {
@@ -169,7 +169,7 @@ export const d3SingleGraph = () => {
                 .duration(250)
                 .attr('fill', codeDark);
 
-                d3.select('#tooltip').classed('hidden', true);
+                d3.select(`#tooltip-${props.dayIndex}`).classed('hidden', true);
             });
 
             function convertSToDate(timeS) {
