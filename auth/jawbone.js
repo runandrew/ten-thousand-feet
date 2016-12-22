@@ -36,29 +36,12 @@ passport.use('jawbone', new JawboneStrategy({
         if (err) {
             console.log('Error receiving Jawbone UP data');
         } else {
-            console.log('****** THIS IS THE ME GET ********', body);
+            const userData = JSON.parse(body).data;
+            console.log('****** THIS IS THE ME GET ********', userData);
+            userData.token = token;
+            done(null, userData);
         }
     });
-
-    up.sleeps.get({}, function(err, body) {
-        if (err) {
-          console.log('Error receiving Jawbone UP data');
-        } else {
-          var jawboneData = JSON.parse(body).data;
-
-          console.log('****** THIS IS THE SLEEPS GET ********', jawboneData);
-        }
-      });
-
-    const user = {
-        id: 1,
-        token,
-        profile
-    };
-
-    console.log('**** AFTER SIGN IN **** ');
-    console.log('User object: ', user);
-    done(null, user);
 }));
 
 router.get('/', passport.authenticate('jawbone', { scope: 'basic_read' }));
