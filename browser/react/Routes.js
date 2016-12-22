@@ -11,6 +11,7 @@ import Graphs from './components/Graphs';
 
 // -- Functions
 import { fetchCodeData7Days } from './reducers/code-data';
+import { fetchUser } from './reducers/user';
 
 /* -----------------    COMPONENT     ------------------ */
 const Routes = ({ fetchInitialData }) => (
@@ -32,10 +33,11 @@ Routes.propTypes = {
 const mapProps = null;
 
 const mapDispatch = dispatch => ({
- fetchInitialData: () => {
-    console.log('Fetching the data');
-    dispatch(fetchCodeData7Days());
-  }
+    fetchInitialData: () => {
+        console.log('Fetching the data');
+        dispatch(fetchCodeData7Days());
+        dispatch(fetchUser());
+    }
 });
 
 export default connect(mapProps, mapDispatch)(Routes);

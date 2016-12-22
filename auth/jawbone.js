@@ -48,7 +48,7 @@ router.get('/', passport.authenticate('jawbone', { scope: 'basic_read' }));
 
 router.get('/callback',
 passport.authenticate('jawbone', {
-    successRedirect: '/', // or wherever
-    failureRedirect: '/' // or wherever
+    successRedirect: '/graphs', // or wherever
+    failureRedirect: '/login' // or wherever
 })
 );

@@ -24644,9 +24644,14 @@
 	
 	var _codeData2 = _interopRequireDefault(_codeData);
 	
+	var _user = __webpack_require__(312);
+	
+	var _user2 = _interopRequireDefault(_user);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.combineReducers)({ codeData: _codeData2.default });
+	// Required files
+	exports.default = (0, _redux.combineReducers)({ codeData: _codeData2.default, user: _user2.default }); // Required packages
 
 /***/ },
 /* 225 */
@@ -26259,12 +26264,16 @@
 	
 	var _codeData = __webpack_require__(225);
 	
+	var _user = __webpack_require__(312);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
 	
-	// Required files
+	// -- Functions
+	
+	// Required packages
 	var Routes = function Routes(_ref) {
 	    var fetchInitialData = _ref.fetchInitialData;
 	    return _react2.default.createElement(
@@ -26282,9 +26291,7 @@
 	// PropType validaiton
 	
 	
-	// -- Functions
-	
-	// Required packages
+	// Required files
 	Routes.propTypes = {
 	    fetchInitialData: _react2.default.PropTypes.func
 	};
@@ -26298,6 +26305,7 @@
 	        fetchInitialData: function fetchInitialData() {
 	            console.log('Fetching the data');
 	            dispatch((0, _codeData.fetchCodeData7Days)());
+	            dispatch((0, _user.fetchUser)());
 	        }
 	    };
 	};
@@ -31156,7 +31164,7 @@
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	var Navbar = function Navbar() {
+	var Navbar = function Navbar(props) {
 	
 	    return _react2.default.createElement(
 	        'nav',
@@ -31173,16 +31181,7 @@
 	            _react2.default.createElement(
 	                'ul',
 	                { className: 'right hide-on-med-and-down' },
-	                _react2.default.createElement(
-	                    'li',
-	                    null,
-	                    _react2.default.createElement(
-	                        _reactRouter.Link,
-	                        { to: '/graphs' },
-	                        'Graphs'
-	                    )
-	                ),
-	                _react2.default.createElement(
+	                props.user.noUser && _react2.default.createElement(
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
@@ -31191,7 +31190,16 @@
 	                        'Login'
 	                    )
 	                ),
-	                _react2.default.createElement(
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/graphs' },
+	                        'Graphs'
+	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
@@ -31199,6 +31207,20 @@
 	                        { href: '/auth/logout' },
 	                        'Logout'
 	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { id: 'navLoggedInName' },
+	                        props.user.first
+	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    { id: 'navLoggedInPic' },
+	                    _react2.default.createElement('img', { src: 'http://jawbone.com/' + props.user.image, height: '40px' })
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -31245,9 +31267,18 @@
 	    );
 	};
 	
+	// PropType validaiton
+	Navbar.propTypes = {
+	    user: _react2.default.PropTypes.object
+	};
+	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = null;
+	var mapProps = function mapProps(state) {
+	    return {
+	        user: state.user
+	    };
+	};
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Navbar);
@@ -31709,49 +31740,17 @@
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
-	            'form',
-	            { className: 'col s4 offset-s4' },
+	            'div',
+	            { className: 'col s6 offset-s3 center' },
 	            _react2.default.createElement(
 	                'h5',
-	                { className: 'center' },
-	                'Please enter your information'
+	                null,
+	                'Please sign in:'
 	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'input-field col s12' },
-	                    _react2.default.createElement('input', { id: 'email', type: 'email', className: 'validate' }),
-	                    _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: 'email' },
-	                        'Email'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'row' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'input-field col s12' },
-	                    _react2.default.createElement('input', { id: 'password', type: 'password', className: 'validate' }),
-	                    _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: 'password' },
-	                        'Password'
-	                    )
-	                )
-	            )
-	        ),
-	        _react2.default.createElement(
-	            'div',
-	            { className: 'col s4 offset-s4' },
 	            _react2.default.createElement(
 	                'a',
 	                { href: '/auth/jawbone/', className: 'waves-effect waves-light btn' },
-	                'Sign in with UP'
+	                'Authenticate with UP'
 	            )
 	        )
 	    );
@@ -31763,6 +31762,61 @@
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchUser = undefined;
+	exports.default = reducer;
+	
+	var _axios = __webpack_require__(226);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    ACTIONS     ------------------ */
+	var SET_USER = 'SET_USER';
+	
+	/* ------------   ACTION CREATORS     ------------------ */
+	// Required packages
+	var setUser = function setUser(user) {
+	    return { type: SET_USER, user: user };
+	};
+	
+	/* ------------       REDUCER     ------------------ */
+	
+	var initialUser = {
+	    noUser: true
+	};
+	
+	function reducer() {
+	    var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialUser;
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case SET_USER:
+	            return action.user;
+	        default:
+	            return user;
+	    }
+	}
+	
+	/* ------------       DISPATCHERS     ------------------ */
+	
+	var fetchUser = exports.fetchUser = function fetchUser() {
+	    return function (dispatch) {
+	        return _axios2.default.get('/auth/me').then(function (data) {
+	            dispatch(setUser(data.data));
+	        });
+	    };
+	};
 
 /***/ }
 /******/ ]);

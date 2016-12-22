@@ -8,23 +8,9 @@ const Auth = () => {
 
     return (
         <div className="row">
-            <form className="col s4 offset-s4">
-                <h5 className="center">Please enter your information</h5>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <input id="email" type="email" className="validate" />
-                        <label htmlFor="email">Email</label>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="input-field col s12">
-                        <input id="password" type="password" className="validate" />
-                        <label htmlFor="password">Password</label>
-                    </div>
-                </div>
-            </form>
-            <div className="col s4 offset-s4">
-                <a href="/auth/jawbone/" className="waves-effect waves-light btn">Sign in with UP</a>
+            <div className="col s6 offset-s3 center">
+                <h5>Please sign in:</h5>
+                <a href="/auth/jawbone/" className="waves-effect waves-light btn">Authenticate with UP</a>
             </div>
         </div>
     );
