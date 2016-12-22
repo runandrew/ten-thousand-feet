@@ -16,7 +16,7 @@ export const condensedDateToUTCWTime = (condensedDate) => {
     const month = condensedDate.slice(4, 6);
     const day = condensedDate.slice(6, 8);
     const hour = condensedDate.slice(8, 10);
-    return new Date(+year, +month - 1, +day, +hour);
+    return new Date(+year, +month - 1, +day, +hour + 1);
 };
 
 // 2016-12-22T05:00:00Z => 12/22/2016

@@ -9,8 +9,8 @@ export const graphSettings = {
     padding: 30,
 
     // Colors
-    codeDark: '#e65100',
-    codeLight: '#ffb74d'
+    codeDark: '#283593',
+    codeLight: '#5c6bc0'
 };
 
 /* -----------------    LOGIC     ------------------ */
@@ -49,8 +49,16 @@ export const d3SingleGraph = () => {
 
             svg.append('g')
             .attr('class', 'y axis')
-            .attr('transform', `translate(${padding}, 0)`)
+            .attr('transform', `translate(${svgWidth - padding * 2}, 0)`)
             .call(yAxis);
+
+            svg.append('clipPath')                  //Make a new clipPath
+            .attr('id', 'chart-area')           //Assign an ID
+            .append('rect')                     //Within the clipPath, create a new rect
+            .attr('x', padding)                 //Set rect's position and size…
+            .attr('y', padding)
+            .attr('width', svgWidth - padding * 3)
+            .attr('height', svgHeight - padding * 2);
 
             // Send back the SVG
             return {
@@ -80,22 +88,26 @@ export const d3SingleGraph = () => {
             .domain([0, 5])
             .range([svgHeight - padding, 0 + padding]);
 
-            return { xScale, yScale };
+            const yScaleSteps = d3.scaleLinear()
+            .domain([0, 10000])
+            .range([svgHeight - padding, 0 + padding]);
+
+            return { xScale, yScale, yScaleSteps };
         },
 
         _createAxes: function (props) {
 
             const xScale = props._scales.xScale;
             const yScale = props._scales.yScale;
+            const yScaleSteps = props._scales.yScaleSteps;
 
             // Axis creation
             const xAxis = d3.axisBottom()
             .scale(xScale)
             .ticks(d3.timeHour.every(1));
 
-            const yAxis = d3.axisLeft()
-            .scale(yScale)
-            .ticks(5);
+            const yAxis = d3.axisRight()
+            .scale(yScaleSteps);
 
             return { xAxis, yAxis };
         },
@@ -109,7 +121,7 @@ export const d3SingleGraph = () => {
             const _scales = this._scales({
                 graphSettings: props.graphSettings,
             }, state);
-            const { xScale, yScale } = _scales;
+            const { xScale, yScale, yScaleSteps } = _scales;
 
             // Create Axes
             const { xAxis, yAxis } = this._createAxes({ _scales });
@@ -119,20 +131,40 @@ export const d3SingleGraph = () => {
             .call(xAxis);
 
             svg.select('.y.axis')
-            .call(yAxis);
+            .call(yAxis)
+            .append('text')
+            .attr('fill', '#000')
+            .attr('transform', 'translate(-20, 35) rotate(-90)')
+            .attr('y', 6)
+            .attr('dy', '0.71em')
+            .style('text-anchor', 'end')
+            .text('Steps [1 step]');
 
             // Colors
             const codeDark = props.graphSettings.codeDark;
             const codeLight = props.graphSettings.codeLight;
 
             // Data
-            const activity = state.dayDataSingle.codingData.hourlyTotals;
+            const codingActivity = state.dayDataSingle.codingData.hourlyTotals;
+            const physicalActivity = state.dayDataSingle.physicalData.hourlyTotals;
 
+            // Create line
+            const line = d3.line()
+            .x(data => xScale(Date.parse(data.date)))
+            .y(data => yScaleSteps(data.totalSteps))
+            .curve(d3.curveCatmullRom.alpha(0.5));
+
+            // Create area under line`
+            const area = d3.area()
+            .x(data => xScale(Date.parse(data.date)))
+            .y0(svgHeight - padding)
+            .y1(data => yScaleSteps(data.totalSteps))
+            .curve(d3.curveCatmullRom.alpha(0.5));
 
             svg.append('g')
             .attr('id', 'bars')
             .selectAll('rect')
-            .data(activity)
+            .data(codingActivity)
             .enter()
             .append('rect')
             .attr('x', data => xScale(data.time))
@@ -176,9 +208,18 @@ export const d3SingleGraph = () => {
                 d3.select(`#tooltip-${props.dayIndex}`).classed('hidden', true);
             });
 
-            function convertSToDate(timeS) {
-                return new Date(timeS * 1000);
-            }
+            svg.append('path')
+            .datum(physicalActivity)
+            .attr('class', 'line')
+            .attr('d', line)
+            .attr('clip-path', 'url(#chart-area)');
+
+            svg.append('path')
+            .datum(physicalActivity)
+            .attr('class', 'area')
+            .attr('d', area)
+            .attr('clip-path', 'url(#chart-area)');
+
         }
 
     };

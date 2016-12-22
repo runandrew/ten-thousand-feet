@@ -24640,7 +24640,7 @@
 	
 	var _redux = __webpack_require__(189);
 	
-	var _apiData = __webpack_require__(313);
+	var _apiData = __webpack_require__(225);
 	
 	var _apiData2 = _interopRequireDefault(_apiData);
 	
@@ -24654,7 +24654,91 @@
 	exports.default = (0, _redux.combineReducers)({ dayData: _apiData2.default, user: _user2.default }); // Required packages
 
 /***/ },
-/* 225 */,
+/* 225 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchCodeData7Days = undefined;
+	exports.default = reducer;
+	
+	var _axios = __webpack_require__(226);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _utils = __webpack_require__(251);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } // Required packages
+	
+	
+	/* -----------------    ACTIONS     ------------------ */
+	var SET_DATA = 'SET_DATA';
+	
+	/* ------------   ACTION CREATORS     ------------------ */
+	var setDayData = function setDayData(data) {
+	    return { type: SET_DATA, data: data };
+	};
+	
+	/* ------------       REDUCER     ------------------ */
+	
+	var initialData = [{
+	    date: '12/22/2016',
+	    codingData: {
+	        branches: [],
+	        hourlyTotals: []
+	    },
+	    physicalData: {
+	        hourlyTotals: [],
+	        totalDistance: 0,
+	        totalSteps: 0
+	    }
+	}];
+	
+	function reducer() {
+	    var dayData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialData;
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case SET_DATA:
+	            return action.data;
+	        default:
+	            return dayData;
+	    }
+	}
+	
+	/* ------------       DISPATCHERS     ------------------ */
+	
+	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
+	    return function (dispatch) {
+	        var convertedDates = (0, _utils.past7dates)();
+	
+	        var promiseArrayCodeData = convertedDates.map(function (date) {
+	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
+	                return returnedData.data;
+	            }).catch(console.error);
+	        });
+	
+	        var promisePhysicalData = _axios2.default.get('/api/jawbone/moves').then(function (returnedData) {
+	            return returnedData.data;
+	        }).catch(console.error);
+	
+	        return Promise.all([].concat(_toConsumableArray(promiseArrayCodeData), [promisePhysicalData])).then(function (data) {
+	            var allData = {
+	                coding: data.slice(0, -1),
+	                physical: data[data.length - 1]
+	            };
+	            var actionData = setDayData((0, _utils.convertAllData)(allData));
+	            dispatch(actionData);
+	        }).catch(console.error);
+	    };
+	};
+
+/***/ },
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26170,7 +26254,7 @@
 	    var month = condensedDate.slice(4, 6);
 	    var day = condensedDate.slice(6, 8);
 	    var hour = condensedDate.slice(8, 10);
-	    return new Date(+year, +month - 1, +day, +hour);
+	    return new Date(+year, +month - 1, +day, +hour + 1);
 	};
 	
 	// 2016-12-22T05:00:00Z => 12/22/2016
@@ -26362,7 +26446,7 @@
 	
 	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
-	var _apiData = __webpack_require__(313);
+	var _apiData = __webpack_require__(225);
 	
 	var _user = __webpack_require__(252);
 	
@@ -31639,8 +31723,8 @@
 	    padding: 30,
 	
 	    // Colors
-	    codeDark: '#e65100',
-	    codeLight: '#ffb74d'
+	    codeDark: '#283593',
+	    codeLight: '#5c6bc0'
 	};
 	
 	/* -----------------    LOGIC     ------------------ */
@@ -31673,7 +31757,13 @@
 	
 	            svg.append('g').attr('class', 'x axis').attr('transform', 'translate(0, ' + (svgHeight - padding) + ')').call(xAxis);
 	
-	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + padding + ', 0)').call(yAxis);
+	            svg.append('g').attr('class', 'y axis').attr('transform', 'translate(' + (svgWidth - padding * 2) + ', 0)').call(yAxis);
+	
+	            svg.append('clipPath') //Make a new clipPath
+	            .attr('id', 'chart-area') //Assign an ID
+	            .append('rect') //Within the clipPath, create a new rect
+	            .attr('x', padding) //Set rect's position and size…
+	            .attr('y', padding).attr('width', svgWidth - padding * 3).attr('height', svgHeight - padding * 2);
 	
 	            // Send back the SVG
 	            return {
@@ -31699,18 +31789,21 @@
 	
 	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
 	
-	            return { xScale: xScale, yScale: yScale };
+	            var yScaleSteps = d3.scaleLinear().domain([0, 10000]).range([svgHeight - padding, 0 + padding]);
+	
+	            return { xScale: xScale, yScale: yScale, yScaleSteps: yScaleSteps };
 	        },
 	
 	        _createAxes: function _createAxes(props) {
 	
 	            var xScale = props._scales.xScale;
 	            var yScale = props._scales.yScale;
+	            var yScaleSteps = props._scales.yScaleSteps;
 	
 	            // Axis creation
 	            var xAxis = d3.axisBottom().scale(xScale).ticks(d3.timeHour.every(1));
 	
-	            var yAxis = d3.axisLeft().scale(yScale).ticks(5);
+	            var yAxis = d3.axisRight().scale(yScaleSteps);
 	
 	            return { xAxis: xAxis, yAxis: yAxis };
 	        },
@@ -31725,7 +31818,8 @@
 	                graphSettings: props.graphSettings
 	            }, state);
 	            var xScale = _scales.xScale,
-	                yScale = _scales.yScale;
+	                yScale = _scales.yScale,
+	                yScaleSteps = _scales.yScaleSteps;
 	
 	            // Create Axes
 	
@@ -31738,16 +31832,31 @@
 	
 	            svg.select('.x.axis').call(xAxis);
 	
-	            svg.select('.y.axis').call(yAxis);
+	            svg.select('.y.axis').call(yAxis).append('text').attr('fill', '#000').attr('transform', 'translate(-20, 35) rotate(-90)').attr('y', 6).attr('dy', '0.71em').style('text-anchor', 'end').text('Steps [1 step]');
 	
 	            // Colors
 	            var codeDark = props.graphSettings.codeDark;
 	            var codeLight = props.graphSettings.codeLight;
 	
 	            // Data
-	            var activity = state.dayDataSingle.codingData.hourlyTotals;
+	            var codingActivity = state.dayDataSingle.codingData.hourlyTotals;
+	            var physicalActivity = state.dayDataSingle.physicalData.hourlyTotals;
 	
-	            svg.append('g').attr('id', 'bars').selectAll('rect').data(activity).enter().append('rect').attr('x', function (data) {
+	            // Create line
+	            var line = d3.line().x(function (data) {
+	                return xScale(Date.parse(data.date));
+	            }).y(function (data) {
+	                return yScaleSteps(data.totalSteps);
+	            }).curve(d3.curveCatmullRom.alpha(0.5));
+	
+	            // Create area under line`
+	            var area = d3.area().x(function (data) {
+	                return xScale(Date.parse(data.date));
+	            }).y0(svgHeight - padding).y1(function (data) {
+	                return yScaleSteps(data.totalSteps);
+	            }).curve(d3.curveCatmullRom.alpha(0.5));
+	
+	            svg.append('g').attr('id', 'bars').selectAll('rect').data(codingActivity).enter().append('rect').attr('x', function (data) {
 	                return xScale(data.time);
 	            }).attr('y', function () {
 	                return yScale(5);
@@ -31776,9 +31885,9 @@
 	                d3.select('#tooltip-' + props.dayIndex).classed('hidden', true);
 	            });
 	
-	            function convertSToDate(timeS) {
-	                return new Date(timeS * 1000);
-	            }
+	            svg.append('path').datum(physicalActivity).attr('class', 'line').attr('d', line).attr('clip-path', 'url(#chart-area)');
+	
+	            svg.append('path').datum(physicalActivity).attr('class', 'area').attr('d', area).attr('clip-path', 'url(#chart-area)');
 	        }
 	
 	    };
@@ -31834,91 +31943,6 @@
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.fetchCodeData7Days = undefined;
-	exports.default = reducer;
-	
-	var _axios = __webpack_require__(226);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _utils = __webpack_require__(251);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } // Required packages
-	
-	
-	/* -----------------    ACTIONS     ------------------ */
-	var SET_DATA = 'SET_DATA';
-	
-	/* ------------   ACTION CREATORS     ------------------ */
-	var setDayData = function setDayData(data) {
-	    return { type: SET_DATA, data: data };
-	};
-	
-	/* ------------       REDUCER     ------------------ */
-	
-	var initialData = [{
-	    date: '12/22/2016',
-	    codingData: {
-	        branches: [],
-	        hourlyTotals: []
-	    },
-	    physicalData: {
-	        hourlyTotals: [],
-	        totalDistance: 0,
-	        totalSteps: 0
-	    }
-	}];
-	
-	function reducer() {
-	    var dayData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialData;
-	    var action = arguments[1];
-	
-	    switch (action.type) {
-	        case SET_DATA:
-	            return action.data;
-	        default:
-	            return dayData;
-	    }
-	}
-	
-	/* ------------       DISPATCHERS     ------------------ */
-	
-	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
-	    return function (dispatch) {
-	        var convertedDates = (0, _utils.past7dates)();
-	
-	        var promiseArrayCodeData = convertedDates.map(function (date) {
-	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
-	                return returnedData.data;
-	            }).catch(console.error);
-	        });
-	
-	        var promisePhysicalData = _axios2.default.get('/api/jawbone/moves').then(function (returnedData) {
-	            return returnedData.data;
-	        }).catch(console.error);
-	
-	        return Promise.all([].concat(_toConsumableArray(promiseArrayCodeData), [promisePhysicalData])).then(function (data) {
-	            var allData = {
-	                coding: data.slice(0, -1),
-	                physical: data[data.length - 1]
-	            };
-	            var actionData = setDayData((0, _utils.convertAllData)(allData));
-	            dispatch(actionData);
-	        }).catch(console.error);
-	    };
-	};
 
 /***/ }
 /******/ ]);

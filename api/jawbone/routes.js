@@ -33,7 +33,6 @@ router.get('/moves', (req, res, next) => {
             res.sendStatus(500);
         } else {
             const moveData = JSON.parse(body);
-            console.log('****** THIS IS THE MOVES GET ********', moveData.data.items.length);
             res.send(moveData.data);
         }
     });
