@@ -2,7 +2,7 @@
 import { combineReducers } from 'redux';
 
 // Required files
-import codeData from './code-data';
+import dayData from './api-data';
 import user from './user';
 
-export default combineReducers({ codeData, user });
+export default combineReducers({ dayData, user });

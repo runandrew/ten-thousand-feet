@@ -6,36 +6,31 @@ import { past7dates, convertAllData } from '../../utils';
 const SET_DATA = 'SET_DATA';
 
 /* ------------   ACTION CREATORS     ------------------ */
-const setDurationData = data => ({ type: SET_DATA, data });
+const setDayData = data => ({ type: SET_DATA, data });
 
 /* ------------       REDUCER     ------------------ */
 
-const initialCodeData = {
-    durationData: [{
-        data: [],
-        start: '2016-12-10T05:00:00Z'
-    }]
-};
+const initialData = [{
+    date: '12/22/2016',
+    codingData: {
+        branches: [],
+        hourlyTotals: []
+    },
+    physicalData: {
+        hourlyTotals: [],
+        totalDistance: 0,
+        totalSteps: 0
+    }
+}];
 
-export default function reducer (codeData = initialCodeData, action) {
+export default function reducer (dayData = initialData, action) {
     switch (action.type) {
-        case SET_DATA:
-            return {
-                durationData: action.data
-            };
-        default: return codeData;
+        case SET_DATA: return action.data;
+        default: return dayData;
     }
 }
 
 /* ------------       DISPATCHERS     ------------------ */
-export const fetchCodeData = () => {
-    return dispatch => {
-        return axios.get('/waka?date=2016-12-20')
-        .then(data => {
-            dispatch(setDurationData(data.data));
-        });
-    };
-};
 
 export const fetchCodeData7Days = () => {
     return dispatch => {
@@ -57,10 +52,8 @@ export const fetchCodeData7Days = () => {
                 coding: data.slice(0, -1),
                 physical: data[data.length - 1]
             };
-
-            convertAllData(allData);
-
-            dispatch(setDurationData(data.slice(0, -1)));
+            const actionData = setDayData(convertAllData(allData));
+            dispatch(actionData);
         })
         .catch(console.error);
     };

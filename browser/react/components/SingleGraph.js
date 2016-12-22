@@ -23,32 +23,26 @@ class SingleGraph extends React.Component {
         const { svg } = this.graph.create(
             `#graph-${this.props.dayIndex}`,
             { graphSettings },
-            { durationData: this.props.durationData }
+            { dayDataSingle: this.props.dayDataSingle }
         );
 
         this.setState({ svg });
 
         this.graph.update(svg,
             { graphSettings, dayIndex: this.props.dayIndex },
-            { durationData: this.props.durationData }
+            { dayDataSingle: this.props.dayDataSingle }
         );
     }
 
     componentDidUpdate() {
         this.graph.update(this.state.svg,
             { graphSettings, dayIndex: this.props.dayIndex },
-            { durationData: this.props.durationData }
+            { dayDataSingle: this.props.dayDataSingle }
             );
     }
 
     getCurrentDay() {
-        const UTCday = dateStrToUTC(this.props.durationData.start);
-        return dateUTCToDayStr(UTCday);
-    }
-
-    getCurrentLocalDate() {
-        const UTCday = dateStrToUTC(this.props.durationData.start);
-        return UTCday.toLocaleDateString();
+        return dateUTCToDayStr(new Date(this.props.dayDataSingle.date));
     }
 
     render() {
@@ -58,7 +52,7 @@ class SingleGraph extends React.Component {
             <div className="row center">
             <div className="card grey lighten-5">
             <div className="card-content" id="mainSet">
-            <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.getCurrentLocalDate() }</span>
+            <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.props.dayDataSingle.date }</span>
             <div id={`graph-${this.props.dayIndex}`} />
             </div>
             <div className="card-action">
@@ -88,7 +82,7 @@ SingleGraph.propTypes = {
 
 const mapProps = (state, ownProps) => {
     return {
-        durationData: state.codeData.durationData[ownProps.dayIndex],
+        dayDataSingle: state.dayData[ownProps.dayIndex],
         graphSettings,
         dayIndex: ownProps.dayIndex
     };

@@ -10,7 +10,7 @@ import Auth from './components/Auth';
 import Graphs from './components/Graphs';
 
 // -- Functions
-import { fetchCodeData7Days } from './reducers/code-data';
+import { fetchCodeData7Days } from './reducers/api-data';
 import { fetchUser } from './reducers/user';
 
 /* -----------------    COMPONENT     ------------------ */

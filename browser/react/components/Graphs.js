@@ -10,7 +10,7 @@ import SingleGraph from './SingleGraph';
 const Graphs = (props) => {
     return (
         <div>
-        { props.durationData.map((day, i) => {
+        { props.dayData.map((day, i) => {
             return ( <SingleGraph dayIndex={i} key={i} /> );
         }) }
         </div>
@@ -21,7 +21,7 @@ const Graphs = (props) => {
 
 const mapProps = (state, ownProps) => {
     return {
-        durationData: state.codeData.durationData,
+        dayData: state.dayData,
     };
 };
 const mapDispatch = null;

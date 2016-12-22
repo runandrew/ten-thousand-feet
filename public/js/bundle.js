@@ -24640,9 +24640,9 @@
 	
 	var _redux = __webpack_require__(189);
 	
-	var _codeData = __webpack_require__(225);
+	var _apiData = __webpack_require__(313);
 	
-	var _codeData2 = _interopRequireDefault(_codeData);
+	var _apiData2 = _interopRequireDefault(_apiData);
 	
 	var _user = __webpack_require__(252);
 	
@@ -24651,86 +24651,10 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Required files
-	exports.default = (0, _redux.combineReducers)({ codeData: _codeData2.default, user: _user2.default }); // Required packages
+	exports.default = (0, _redux.combineReducers)({ dayData: _apiData2.default, user: _user2.default }); // Required packages
 
 /***/ },
-/* 225 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.fetchCodeData7Days = exports.fetchCodeData = undefined;
-	exports.default = reducer;
-	
-	var _axios = __webpack_require__(226);
-	
-	var _axios2 = _interopRequireDefault(_axios);
-	
-	var _utils = __webpack_require__(251);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* -----------------    ACTIONS     ------------------ */
-	// Required packages
-	var SET_DATA = 'SET_DATA';
-	
-	/* ------------   ACTION CREATORS     ------------------ */
-	var setDurationData = function setDurationData(data) {
-	    return { type: SET_DATA, data: data };
-	};
-	
-	/* ------------       REDUCER     ------------------ */
-	
-	var initialCodeData = {
-	    durationData: [{
-	        data: [],
-	        start: '2016-12-10T05:00:00Z'
-	    }]
-	};
-	
-	function reducer() {
-	    var codeData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialCodeData;
-	    var action = arguments[1];
-	
-	    switch (action.type) {
-	        case SET_DATA:
-	            return {
-	                durationData: action.data
-	            };
-	        default:
-	            return codeData;
-	    }
-	}
-	
-	/* ------------       DISPATCHERS     ------------------ */
-	var fetchCodeData = exports.fetchCodeData = function fetchCodeData() {
-	    return function (dispatch) {
-	        return _axios2.default.get('/waka?date=2016-12-20').then(function (data) {
-	            dispatch(setDurationData(data.data));
-	        });
-	    };
-	};
-	
-	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
-	    return function (dispatch) {
-	        var convertedDates = (0, _utils.past7dates)();
-	
-	        var promiseArray = convertedDates.map(function (date) {
-	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
-	                return returnedData.data;
-	            }).catch(console.error);
-	        });
-	
-	        return Promise.all(promiseArray).then(function (data) {
-	            dispatch(setDurationData(data));
-	        }).catch(console.error);
-	    };
-	};
-
-/***/ },
+/* 225 */,
 /* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -26230,6 +26154,30 @@
 	});
 	// Utility functions
 	
+	/* -----------------    DATE CONVERSIONS     ------------------ */
+	
+	// 20161222 => 12/22/2016
+	var condensedDateToSlashDate = exports.condensedDateToSlashDate = function condensedDateToSlashDate(condensedDate) {
+	    var year = condensedDate.slice(0, 4);
+	    var month = condensedDate.slice(4, 6);
+	    var day = condensedDate.slice(6, 8);
+	    return new Date(+year, +month - 1, +day).toLocaleDateString();
+	};
+	
+	// 2016122200 => Thu Dec 22 2016 13:00:00 GMT-0500 (EST)
+	var condensedDateToUTCWTime = exports.condensedDateToUTCWTime = function condensedDateToUTCWTime(condensedDate) {
+	    var year = condensedDate.slice(0, 4);
+	    var month = condensedDate.slice(4, 6);
+	    var day = condensedDate.slice(6, 8);
+	    var hour = condensedDate.slice(8, 10);
+	    return new Date(+year, +month - 1, +day, +hour);
+	};
+	
+	// 2016-12-22T05:00:00Z => 12/22/2016
+	var wakaDateToSlashDate = exports.wakaDateToSlashDate = function wakaDateToSlashDate(wakaDate) {
+	    return new Date(wakaDate).toLocaleDateString();
+	};
+	
 	var dateStrToUTC = exports.dateStrToUTC = function dateStrToUTC(dateStr) {
 	    return new Date(dateStr);
 	};
@@ -26240,6 +26188,7 @@
 	    return daysOfWeek[day];
 	};
 	
+	// Return the past seven dates
 	var past7dates = exports.past7dates = function past7dates() {
 	    var oneDay = 24 * 60 * 60 * 1000;
 	    var today = new Date();
@@ -26253,11 +26202,79 @@
 	    });
 	
 	    function convertDate(date) {
+	        // 2016/12/10 => 2016-12-10
 	        var localDateSplit = date.toLocaleDateString().split('/');
 	        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
 	    }
 	
 	    return mappedDates.map(convertDate);
+	};
+	
+	/* -----------------    API DATA MANIPULATION     ------------------ */
+	// Take all of the API data from Jawbone and Wakatime and combine it into an app friendly version
+	var convertAllData = exports.convertAllData = function convertAllData(_ref) {
+	    var coding = _ref.coding,
+	        physical = _ref.physical;
+	
+	
+	    // Maps each day's coding event
+	    function mapCodeEvents(dayEvents) {
+	        return dayEvents.map(function (event) {
+	            return {
+	                duration: event.duration,
+	                project: event.project,
+	                time: new Date(event.time * 1000)
+	            };
+	        });
+	    }
+	
+	    // Takes each coding day and formats it
+	    var mappedCodeAllData = coding.map(function (day) {
+	        return {
+	            date: wakaDateToSlashDate(day.start),
+	            codingData: {
+	                branches: day.branches,
+	                hourlyTotals: mapCodeEvents(day.data)
+	            }
+	        };
+	    });
+	
+	    // Maps each day's hourly physical events
+	    function mapPhysHourlyTotals(dayHourlyTotals) {
+	        var totalStepCount = 0;
+	        var keysPhysHourlyTotals = Object.keys(dayHourlyTotals);
+	        return keysPhysHourlyTotals.map(function (hourKey) {
+	            totalStepCount += dayHourlyTotals[hourKey].steps; // Add current hour's steps to the total steps
+	
+	            return {
+	                date: condensedDateToUTCWTime(hourKey),
+	                steps: dayHourlyTotals[hourKey].steps,
+	                totalSteps: totalStepCount
+	            };
+	        });
+	    }
+	
+	    // Takes each physical day data and formats it
+	    var mappedPhysAllData = physical.items.map(function (day) {
+	        return {
+	            date: condensedDateToSlashDate('' + day.date),
+	            physicalData: {
+	                totalSteps: day.details.steps,
+	                totalDistance: day.details.km, // total distance travelled [km]
+	                hourlyTotals: mapPhysHourlyTotals(day.details.hourly_totals)
+	            }
+	        };
+	    });
+	
+	    // Take all of the data (physical and coding) and merge the common days, target are the coding days
+	    var mappedAllData = mappedCodeAllData.map(function (codeDay) {
+	        var correspondingPhysDayData = mappedPhysAllData.find(function (physDay) {
+	            return codeDay.date === physDay.date;
+	        });
+	        return Object.assign({}, codeDay, correspondingPhysDayData);
+	    });
+	
+	    return mappedAllData;
 	};
 
 /***/ },
@@ -26345,7 +26362,7 @@
 	
 	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
-	var _codeData = __webpack_require__(225);
+	var _apiData = __webpack_require__(313);
 	
 	var _user = __webpack_require__(252);
 	
@@ -26398,7 +26415,7 @@
 	        },
 	        fetchGraphData: function fetchGraphData() {
 	            console.log('Fetching graph data');
-	            dispatch((0, _codeData.fetchCodeData7Days)());
+	            dispatch((0, _apiData.fetchCodeData7Days)());
 	        }
 	    };
 	};
@@ -31404,7 +31421,7 @@
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        props.durationData.map(function (day, i) {
+	        props.dayData.map(function (day, i) {
 	            return _react2.default.createElement(_SingleGraph2.default, { dayIndex: i, key: i });
 	        })
 	    );
@@ -31416,7 +31433,7 @@
 	// Required libraries
 	var mapProps = function mapProps(state, ownProps) {
 	    return {
-	        durationData: state.codeData.durationData
+	        dayData: state.dayData
 	    };
 	};
 	var mapDispatch = null;
@@ -31479,29 +31496,22 @@
 	    _createClass(SingleGraph, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
-	            var _graph$create = this.graph.create('#graph-' + this.props.dayIndex, { graphSettings: _singleGraph.graphSettings }, { durationData: this.props.durationData }),
+	            var _graph$create = this.graph.create('#graph-' + this.props.dayIndex, { graphSettings: _singleGraph.graphSettings }, { dayDataSingle: this.props.dayDataSingle }),
 	                svg = _graph$create.svg;
 	
 	            this.setState({ svg: svg });
 	
-	            this.graph.update(svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { durationData: this.props.durationData });
+	            this.graph.update(svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { dayDataSingle: this.props.dayDataSingle });
 	        }
 	    }, {
 	        key: 'componentDidUpdate',
 	        value: function componentDidUpdate() {
-	            this.graph.update(this.state.svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { durationData: this.props.durationData });
+	            this.graph.update(this.state.svg, { graphSettings: _singleGraph.graphSettings, dayIndex: this.props.dayIndex }, { dayDataSingle: this.props.dayDataSingle });
 	        }
 	    }, {
 	        key: 'getCurrentDay',
 	        value: function getCurrentDay() {
-	            var UTCday = (0, _utils.dateStrToUTC)(this.props.durationData.start);
-	            return (0, _utils.dateUTCToDayStr)(UTCday);
-	        }
-	    }, {
-	        key: 'getCurrentLocalDate',
-	        value: function getCurrentLocalDate() {
-	            var UTCday = (0, _utils.dateStrToUTC)(this.props.durationData.start);
-	            return UTCday.toLocaleDateString();
+	            return (0, _utils.dateUTCToDayStr)(new Date(this.props.dayDataSingle.date));
 	        }
 	    }, {
 	        key: 'render',
@@ -31526,7 +31536,7 @@
 	                                    { className: 'card-title' },
 	                                    this.props.dayIndex ? this.getCurrentDay() + '\'s' : "Today's",
 	                                    ' Activity - ',
-	                                    this.getCurrentLocalDate()
+	                                    this.props.dayDataSingle.date
 	                                ),
 	                                _react2.default.createElement('div', { id: 'graph-' + this.props.dayIndex })
 	                            ),
@@ -31600,7 +31610,7 @@
 	
 	var mapProps = function mapProps(state, ownProps) {
 	    return {
-	        durationData: state.codeData.durationData[ownProps.dayIndex],
+	        dayDataSingle: state.dayData[ownProps.dayIndex],
 	        graphSettings: _singleGraph.graphSettings,
 	        dayIndex: ownProps.dayIndex
 	    };
@@ -31618,9 +31628,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	
-	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-	
 	/* global d3*/
 	
 	/* -----------------    CONSTANTS     ------------------ */
@@ -31679,23 +31686,16 @@
 	        _scales: function _scales(props, state) {
 	
 	            // Destructure the day string
-	            var _state$durationData$s = state.durationData.start.split('T')[0].split('-').map(function (str) {
-	                return +str;
-	            }),
-	                _state$durationData$s2 = _slicedToArray(_state$durationData$s, 3),
-	                year = _state$durationData$s2[0],
-	                month = _state$durationData$s2[1],
-	                day = _state$durationData$s2[2];
+	            //const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
+	            var date = state.dayDataSingle.date;
 	
 	            // SVG Parameters
-	
-	
 	            var svgWidth = props.graphSettings.svgWidth;
 	            var svgHeight = props.graphSettings.svgHeight;
 	            var padding = props.graphSettings.padding;
 	
 	            // Scaling
-	            var xScale = d3.scaleTime().domain([new Date(year, month - 1, day, 6), new Date(year, month - 1, day, 24)]).range([0 + padding, svgWidth - padding * 2]);
+	            var xScale = d3.scaleTime().domain([new Date(date).setHours(6, 0, 0, 0), new Date(date).setHours(24, 0, 0, 0)]).range([0 + padding, svgWidth - padding * 2]);
 	
 	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
 	
@@ -31745,14 +31745,14 @@
 	            var codeLight = props.graphSettings.codeLight;
 	
 	            // Data
-	            var activity = state.durationData.data;
+	            var activity = state.dayDataSingle.codingData.hourlyTotals;
 	
 	            svg.append('g').attr('id', 'bars').selectAll('rect').data(activity).enter().append('rect').attr('x', function (data) {
-	                return xScale(convertSToDate(data.time));
+	                return xScale(data.time);
 	            }).attr('y', function () {
 	                return yScale(5);
 	            }).attr('width', function (data) {
-	                return xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time));
+	                return xScale(Date.parse(data.time) + data.duration * 1000) - xScale(Date.parse(data.time));
 	            }).attr('height', function () {
 	                return svgHeight - yScale(5) - padding;
 	            }).attr('fill', codeDark).on('mouseover', function (data) {
@@ -31834,6 +31834,91 @@
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchCodeData7Days = undefined;
+	exports.default = reducer;
+	
+	var _axios = __webpack_require__(226);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	var _utils = __webpack_require__(251);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } // Required packages
+	
+	
+	/* -----------------    ACTIONS     ------------------ */
+	var SET_DATA = 'SET_DATA';
+	
+	/* ------------   ACTION CREATORS     ------------------ */
+	var setDayData = function setDayData(data) {
+	    return { type: SET_DATA, data: data };
+	};
+	
+	/* ------------       REDUCER     ------------------ */
+	
+	var initialData = [{
+	    date: '12/22/2016',
+	    codingData: {
+	        branches: [],
+	        hourlyTotals: []
+	    },
+	    physicalData: {
+	        hourlyTotals: [],
+	        totalDistance: 0,
+	        totalSteps: 0
+	    }
+	}];
+	
+	function reducer() {
+	    var dayData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialData;
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case SET_DATA:
+	            return action.data;
+	        default:
+	            return dayData;
+	    }
+	}
+	
+	/* ------------       DISPATCHERS     ------------------ */
+	
+	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
+	    return function (dispatch) {
+	        var convertedDates = (0, _utils.past7dates)();
+	
+	        var promiseArrayCodeData = convertedDates.map(function (date) {
+	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
+	                return returnedData.data;
+	            }).catch(console.error);
+	        });
+	
+	        var promisePhysicalData = _axios2.default.get('/api/jawbone/moves').then(function (returnedData) {
+	            return returnedData.data;
+	        }).catch(console.error);
+	
+	        return Promise.all([].concat(_toConsumableArray(promiseArrayCodeData), [promisePhysicalData])).then(function (data) {
+	            var allData = {
+	                coding: data.slice(0, -1),
+	                physical: data[data.length - 1]
+	            };
+	            var actionData = setDayData((0, _utils.convertAllData)(allData));
+	            dispatch(actionData);
+	        }).catch(console.error);
+	    };
+	};
 
 /***/ }
 /******/ ]);
