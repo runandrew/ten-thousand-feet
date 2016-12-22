@@ -24644,9 +24644,14 @@
 	
 	var _codeData2 = _interopRequireDefault(_codeData);
 	
+	var _user = __webpack_require__(312);
+	
+	var _user2 = _interopRequireDefault(_user);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	exports.default = (0, _redux.combineReducers)({ codeData: _codeData2.default });
+	// Required files
+	exports.default = (0, _redux.combineReducers)({ codeData: _codeData2.default, user: _user2.default }); // Required packages
 
 /***/ },
 /* 225 */
@@ -24664,13 +24669,15 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _utils = __webpack_require__(310);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    ACTIONS     ------------------ */
+	// Required packages
 	var SET_DATA = 'SET_DATA';
 	
 	/* ------------   ACTION CREATORS     ------------------ */
-	// Required packages
 	var setDurationData = function setDurationData(data) {
 	    return { type: SET_DATA, data: data };
 	};
@@ -24709,22 +24716,7 @@
 	
 	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
 	    return function (dispatch) {
-	        var oneDay = 24 * 60 * 60 * 1000;
-	        var today = new Date();
-	        var dates = [];
-	        for (var i = 0; i < 7; i++) {
-	            dates.push(today - oneDay * i);
-	        }
-	
-	        var mappedDates = dates.map(function (date) {
-	            return new Date(date);
-	        });
-	
-	        function convertDate(date) {
-	            var localDateSplit = date.toLocaleDateString().split('/');
-	            return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
-	        }
-	        var convertedDates = mappedDates.map(convertDate);
+	        var convertedDates = (0, _utils.past7dates)();
 	
 	        var promiseArray = convertedDates.map(function (date) {
 	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
@@ -26249,41 +26241,63 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
+	var _Auth = __webpack_require__(311);
+	
+	var _Auth2 = _interopRequireDefault(_Auth);
+	
+	var _Graphs = __webpack_require__(307);
+	
+	var _Graphs2 = _interopRequireDefault(_Graphs);
+	
 	var _codeData = __webpack_require__(225);
+	
+	var _user = __webpack_require__(312);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
 	
-	// Required files
+	// -- Functions
+	
+	// Required packages
 	var Routes = function Routes(_ref) {
 	    var fetchInitialData = _ref.fetchInitialData;
 	    return _react2.default.createElement(
 	        _reactRouter.Router,
 	        { history: _reactRouter.browserHistory },
-	        _react2.default.createElement(_reactRouter.Route, { path: '/', component: _Root2.default, onEnter: fetchInitialData })
+	        _react2.default.createElement(
+	            _reactRouter.Route,
+	            { path: '/', component: _Root2.default, onEnter: fetchInitialData },
+	            _react2.default.createElement(_reactRouter.Router, { path: '/login', component: _Auth2.default }),
+	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default })
+	        )
 	    );
 	};
 	
 	// PropType validaiton
 	
-	// -- Functions
 	
-	// Required packages
+	// Required files
 	Routes.propTypes = {
-	    fetchInitialData: _react2.default.PropTypes.func
+	    fetchInitialData: _react2.default.PropTypes.func,
+	    user: _react2.default.PropTypes.object
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = null;
+	var mapProps = function mapProps(state) {
+	    return {
+	        user: state.user
+	    };
+	};
 	
 	var mapDispatch = function mapDispatch(dispatch) {
 	    return {
 	        fetchInitialData: function fetchInitialData() {
 	            console.log('Fetching the data');
 	            dispatch((0, _codeData.fetchCodeData7Days)());
+	            dispatch((0, _user.fetchUser)());
 	        }
 	    };
 	};
@@ -31108,17 +31122,17 @@
 	/* -----------------    COMPONENT     ------------------ */
 	
 	// Required files
-	exports.default = function () {
+	var Root = function Root(props) {
 	    return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(_Navbar2.default, null),
-	        _react2.default.createElement(_Graphs2.default, null)
+	        props.children
 	    );
-	};
+	}; // Required packages
+	exports.default = Root;
 	
 	/* -----------------    CONTAINER     ------------------ */
-	// Required packages
 
 /***/ },
 /* 306 */
@@ -31136,11 +31150,13 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
+	var _reactRouter = __webpack_require__(252);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	var Navbar = function Navbar() {
+	var Navbar = function Navbar(props) {
 	
 	    return _react2.default.createElement(
 	        'nav',
@@ -31149,22 +31165,54 @@
 	            'div',
 	            { className: 'nav-wrapper container' },
 	            _react2.default.createElement(
-	                'a',
-	                { id: 'logo-container', href: '#', className: 'brand-logo' },
+	                _reactRouter.Link,
+	                { id: 'logo-container', to: '/', className: 'brand-logo' },
 	                _react2.default.createElement('img', { src: '/img/logo.png', width: '50px' }),
 	                '10,000 feet'
 	            ),
 	            _react2.default.createElement(
 	                'ul',
 	                { className: 'right hide-on-med-and-down' },
-	                _react2.default.createElement(
+	                props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/login' },
+	                        'Login'
+	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/graphs' },
+	                        'Graphs'
+	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
 	                        'a',
-	                        { href: '#' },
-	                        'Login'
+	                        { href: '/auth/logout' },
+	                        'Logout'
 	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        'span',
+	                        { id: 'navLoggedInName' },
+	                        props.user.first
+	                    )
+	                ),
+	                !props.user.noUser && _react2.default.createElement(
+	                    'li',
+	                    { id: 'navLoggedInPic' },
+	                    _react2.default.createElement('img', { src: 'http://jawbone.com/' + props.user.image, height: '40px' })
 	                )
 	            ),
 	            _react2.default.createElement(
@@ -31174,9 +31222,27 @@
 	                    'li',
 	                    null,
 	                    _react2.default.createElement(
-	                        'a',
-	                        { href: '#' },
+	                        _reactRouter.Link,
+	                        { to: '/graphs' },
+	                        'Graphs'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/login' },
 	                        'Login'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'li',
+	                    null,
+	                    _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        { to: '/auth/logout' },
+	                        'Logout'
 	                    )
 	                )
 	            ),
@@ -31193,9 +31259,18 @@
 	    );
 	};
 	
+	// PropType validaiton
+	Navbar.propTypes = {
+	    user: _react2.default.PropTypes.object
+	};
+	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = null;
+	var mapProps = function mapProps(state) {
+	    return {
+	        user: state.user
+	    };
+	};
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Navbar);
@@ -31627,6 +31702,132 @@
 	    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	    var day = UTCdate.getDay();
 	    return daysOfWeek[day];
+	};
+	
+	var past7dates = exports.past7dates = function past7dates() {
+	    var oneDay = 24 * 60 * 60 * 1000;
+	    var today = new Date();
+	    var dates = [];
+	    for (var i = 0; i < 7; i++) {
+	        dates.push(today - oneDay * i);
+	    }
+	
+	    var mappedDates = dates.map(function (date) {
+	        return new Date(date);
+	    });
+	
+	    function convertDate(date) {
+	        var localDateSplit = date.toLocaleDateString().split('/');
+	        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
+	    }
+	
+	    return mappedDates.map(convertDate);
+	};
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(178);
+	
+	var _reactRouter = __webpack_require__(252);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	var Auth = function Auth() {
+	
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'col s6 offset-s3 center' },
+	            _react2.default.createElement(
+	                'h5',
+	                null,
+	                'Please sign in:'
+	            ),
+	            _react2.default.createElement(
+	                'a',
+	                { href: '/auth/jawbone/', className: 'waves-effect waves-light btn' },
+	                'Authenticate with UP'
+	            )
+	        )
+	    );
+	};
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	var mapProps = null;
+	var mapDispatch = null;
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.fetchUser = undefined;
+	exports.default = reducer;
+	
+	var _axios = __webpack_require__(226);
+	
+	var _axios2 = _interopRequireDefault(_axios);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    ACTIONS     ------------------ */
+	var SET_USER = 'SET_USER';
+	
+	/* ------------   ACTION CREATORS     ------------------ */
+	// Required packages
+	var setUser = function setUser(user) {
+	    return { type: SET_USER, user: user };
+	};
+	
+	/* ------------       REDUCER     ------------------ */
+	
+	var initialUser = {
+	    noUser: true
+	};
+	
+	function reducer() {
+	    var user = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialUser;
+	    var action = arguments[1];
+	
+	    switch (action.type) {
+	        case SET_USER:
+	            return action.user;
+	        default:
+	            return user;
+	    }
+	}
+	
+	/* ------------       DISPATCHERS     ------------------ */
+	
+	var fetchUser = exports.fetchUser = function fetchUser() {
+	    return function (dispatch) {
+	        return _axios2.default.get('/auth/me').then(function (data) {
+	            dispatch(setUser(data.data));
+	        });
+	    };
 	};
 
 /***/ }

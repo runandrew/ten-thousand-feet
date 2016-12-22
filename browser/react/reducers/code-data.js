@@ -1,5 +1,6 @@
 // Required packages
 import axios from 'axios';
+import { past7dates } from '../../utils';
 
 /* -----------------    ACTIONS     ------------------ */
 const SET_DATA = 'SET_DATA';
@@ -38,20 +39,7 @@ export const fetchCodeData = () => {
 
 export const fetchCodeData7Days = () => {
     return dispatch => {
-        const oneDay = 24 * 60 * 60 * 1000;
-        const today = new Date();
-        const dates = [];
-        for (let i = 0; i < 7; i++) {
-            dates.push(today - oneDay * i);
-        }
-
-        const mappedDates = dates.map(date => new Date(date));
-
-        function convertDate (date) {
-            const localDateSplit = date.toLocaleDateString().split('/');
-            return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
-        }
-        const convertedDates = mappedDates.map(convertDate);
+        const convertedDates = past7dates();
 
         const promiseArray = convertedDates.map(date => {
             return axios.get(`/api/wakatime/durations?date=${date}`)

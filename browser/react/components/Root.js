@@ -7,11 +7,15 @@ import Graphs from './Graphs';
 
 /* -----------------    COMPONENT     ------------------ */
 
-export default () => (
-    <div>
-        <Navbar />
-        <Graphs />
-    </div>
-);
+const Root = (props) => {
+    return (
+        <div>
+            <Navbar />
+            { props.children }
+        </div>
+    );
+};
+
+export default Root;
 
 /* -----------------    CONTAINER     ------------------ */

@@ -32,3 +32,15 @@
 #logo-container img {
     margin-right: 0.50em;
 }
+
+#navLoggedInName {
+    padding-left: 15px;
+}
+
+#navLoggedInPic {
+    margin: 12px;
+}
+
+#navLoggedInPic img {
+    border-radius: 7px;
+}
