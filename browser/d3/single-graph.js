@@ -63,7 +63,8 @@ export const d3SingleGraph = () => {
         _scales: function (props, state) {
 
             // Destructure the day string
-            const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
+            //const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
+            let date = state.dayDataSingle.date;
 
             // SVG Parameters
             const svgWidth = props.graphSettings.svgWidth;
@@ -72,7 +73,7 @@ export const d3SingleGraph = () => {
 
             // Scaling
             const xScale = d3.scaleTime()
-            .domain([new Date(year, month - 1, day, 6), new Date(year, month - 1, day, 24)])
+            .domain([(new Date(date)).setHours(6, 0, 0, 0), (new Date(date)).setHours(24, 0, 0, 0)])
             .range([0 + padding, svgWidth - padding * 2]);
 
             const yScale = d3.scaleLinear()
@@ -125,7 +126,8 @@ export const d3SingleGraph = () => {
             const codeLight = props.graphSettings.codeLight;
 
             // Data
-            const activity = state.durationData.data;
+            const activity = state.dayDataSingle.codingData.hourlyTotals;
+
 
             svg.append('g')
             .attr('id', 'bars')
@@ -133,9 +135,11 @@ export const d3SingleGraph = () => {
             .data(activity)
             .enter()
             .append('rect')
-            .attr('x', data => xScale(convertSToDate(data.time)))
+            .attr('x', data => xScale(data.time))
             .attr('y', () => yScale(5))
-            .attr('width', data => xScale(convertSToDate(data.time + data.duration)) - xScale(convertSToDate(data.time)))
+            .attr('width', data => {
+                return xScale(Date.parse(data.time) + data.duration * 1000) - xScale(Date.parse(data.time));
+            })
             .attr('height', () => svgHeight - yScale(5) - padding)
             .attr('fill', codeDark)
             .on('mouseover', function(data) {

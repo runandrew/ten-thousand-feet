@@ -1,34 +1,6 @@
 // Utility functions
 
-export const dateStrToUTC = (dateStr) => {
-    return new Date(dateStr);
-};
-
-export const dateUTCToDayStr = (UTCdate) => {
-    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const day = UTCdate.getDay();
-    return daysOfWeek[day];
-};
-
-export const past7dates = () => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    const today = new Date();
-    const dates = [];
-    for (let i = 0; i < 7; i++) {
-        dates.push(today - oneDay * i);
-    }
-
-    const mappedDates = dates.map(date => new Date(date));
-
-    function convertDate (date) { // 2016/12/10 => 2016-12-10
-        const localDateSplit = date.toLocaleDateString().split('/');
-        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
-    }
-
-    return mappedDates.map(convertDate);
-};
-
-// ****** Date conversions ******
+/* -----------------    DATE CONVERSIONS     ------------------ */
 
 // 20161222 => 12/22/2016
 export const condensedDateToSlashDate = (condensedDate) => {
@@ -52,6 +24,37 @@ export const wakaDateToSlashDate = (wakaDate) => {
     return (new Date(wakaDate)).toLocaleDateString();
 };
 
+export const dateStrToUTC = (dateStr) => {
+    return new Date(dateStr);
+};
+
+export const dateUTCToDayStr = (UTCdate) => {
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const day = UTCdate.getDay();
+    return daysOfWeek[day];
+};
+
+// Return the past seven dates
+export const past7dates = () => {
+    const oneDay = 24 * 60 * 60 * 1000;
+    const today = new Date();
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+        dates.push(today - oneDay * i);
+    }
+
+    const mappedDates = dates.map(date => new Date(date));
+
+    function convertDate (date) { // 2016/12/10 => 2016-12-10
+        const localDateSplit = date.toLocaleDateString().split('/');
+        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
+    }
+
+    return mappedDates.map(convertDate);
+};
+
+
+/* -----------------    API DATA MANIPULATION     ------------------ */
 // Take all of the API data from Jawbone and Wakatime and combine it into an app friendly version
 export const convertAllData = ({ coding, physical }) => {
 
@@ -109,7 +112,6 @@ export const convertAllData = ({ coding, physical }) => {
         const correspondingPhysDayData = mappedPhysAllData.find(physDay => codeDay.date === physDay.date);
         return Object.assign({}, codeDay, correspondingPhysDayData);
     });
-    console.log('after all mapping', mappedAllData);
 
     return mappedAllData;
 };
