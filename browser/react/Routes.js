@@ -26,11 +26,14 @@ const Routes = ({ fetchInitialData }) => (
 // PropType validaiton
 Routes.propTypes = {
     fetchInitialData: React.PropTypes.func,
+    user: React.PropTypes.object
 };
 
 /* -----------------    CONTAINER     ------------------ */
 
-const mapProps = null;
+const mapProps = (state) => ({
+    user: state.user
+});
 
 const mapDispatch = dispatch => ({
     fetchInitialData: () => {

@@ -34,7 +34,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // Sessions
 app.use(session({
-    secret: 'radicalPenguins'
+    secret: 'radicalPenguins',
+    resave: false,
+    saveUninitialized: false
 }));
 
 // Passport middleware
@@ -43,15 +45,15 @@ app.use(passport.session());
 
 // Passport serialization
 passport.serializeUser(function (user, done) {
-    console.log('*********************** SERIALIZE USER ***********************');
-    console.log(user);
+    // console.log('*********************** SERIALIZE USER ***********************');
+    // console.log(user);
     done(null, user);
 });
 
-passport.deserializeUser(function (id, done) {
-    console.log('*********************** DESERIALIZE USER ***********************');
-    console.log(id);
-    done(null, id);
+passport.deserializeUser(function (user, done) {
+    // console.log('*********************** DESERIALIZE USER ***********************');
+    // console.log(id);
+    done(null, user);
 });
 
 // Log the session object for each call

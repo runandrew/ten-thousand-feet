@@ -32,6 +32,15 @@ passport.use('jawbone', new JawboneStrategy({
     };
     const up = require('jawbone-up')(options);
 
+    up.moves.get({}, function(err, body) {
+        if (err) {
+            console.log('Error receiving Jawbone UP data');
+        } else {
+            const moveData = JSON.parse(body);
+            console.log('****** THIS IS THE MOVES GET ********', moveData.data.items.length);
+        }
+    });
+
     up.me.get({}, function(err, body) {
         if (err) {
             console.log('Error receiving Jawbone UP data');
@@ -44,7 +53,7 @@ passport.use('jawbone', new JawboneStrategy({
     });
 }));
 
-router.get('/', passport.authenticate('jawbone', { scope: 'basic_read' }));
+router.get('/', passport.authenticate('jawbone', { scope: ['basic_read', 'move_read'] }));
 
 router.get('/callback',
 passport.authenticate('jawbone', {

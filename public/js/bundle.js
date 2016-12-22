@@ -24669,13 +24669,15 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _utils = __webpack_require__(310);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    ACTIONS     ------------------ */
+	// Required packages
 	var SET_DATA = 'SET_DATA';
 	
 	/* ------------   ACTION CREATORS     ------------------ */
-	// Required packages
 	var setDurationData = function setDurationData(data) {
 	    return { type: SET_DATA, data: data };
 	};
@@ -24714,22 +24716,7 @@
 	
 	var fetchCodeData7Days = exports.fetchCodeData7Days = function fetchCodeData7Days() {
 	    return function (dispatch) {
-	        var oneDay = 24 * 60 * 60 * 1000;
-	        var today = new Date();
-	        var dates = [];
-	        for (var i = 0; i < 7; i++) {
-	            dates.push(today - oneDay * i);
-	        }
-	
-	        var mappedDates = dates.map(function (date) {
-	            return new Date(date);
-	        });
-	
-	        function convertDate(date) {
-	            var localDateSplit = date.toLocaleDateString().split('/');
-	            return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
-	        }
-	        var convertedDates = mappedDates.map(convertDate);
+	        var convertedDates = (0, _utils.past7dates)();
 	
 	        var promiseArray = convertedDates.map(function (date) {
 	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
@@ -26293,12 +26280,17 @@
 	
 	// Required files
 	Routes.propTypes = {
-	    fetchInitialData: _react2.default.PropTypes.func
+	    fetchInitialData: _react2.default.PropTypes.func,
+	    user: _react2.default.PropTypes.object
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = null;
+	var mapProps = function mapProps(state) {
+	    return {
+	        user: state.user
+	    };
+	};
 	
 	var mapDispatch = function mapDispatch(dispatch) {
 	    return {
@@ -31710,6 +31702,26 @@
 	    var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 	    var day = UTCdate.getDay();
 	    return daysOfWeek[day];
+	};
+	
+	var past7dates = exports.past7dates = function past7dates() {
+	    var oneDay = 24 * 60 * 60 * 1000;
+	    var today = new Date();
+	    var dates = [];
+	    for (var i = 0; i < 7; i++) {
+	        dates.push(today - oneDay * i);
+	    }
+	
+	    var mappedDates = dates.map(function (date) {
+	        return new Date(date);
+	    });
+	
+	    function convertDate(date) {
+	        var localDateSplit = date.toLocaleDateString().split('/');
+	        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
+	    }
+	
+	    return mappedDates.map(convertDate);
 	};
 
 /***/ },
