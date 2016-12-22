@@ -14,11 +14,11 @@ import { fetchCodeData7Days } from './reducers/code-data';
 import { fetchUser } from './reducers/user';
 
 /* -----------------    COMPONENT     ------------------ */
-const Routes = ({ fetchInitialData }) => (
+const Routes = ({ fetchInitialData, fetchGraphData }) => (
     <Router history={ browserHistory }>
         <Route path="/" component={Root} onEnter={ fetchInitialData }>
             <Router path="/login" component={Auth} />
-            <Router path="/graphs" component={Graphs} />
+            <Router path="/graphs" component={Graphs} onEnter={ fetchGraphData }/>
         </Route>
     </Router>
 );
@@ -26,6 +26,7 @@ const Routes = ({ fetchInitialData }) => (
 // PropType validaiton
 Routes.propTypes = {
     fetchInitialData: React.PropTypes.func,
+    fetchGraphData: React.PropTypes.func,
     user: React.PropTypes.object
 };
 
@@ -37,9 +38,12 @@ const mapProps = (state) => ({
 
 const mapDispatch = dispatch => ({
     fetchInitialData: () => {
-        console.log('Fetching the data');
-        dispatch(fetchCodeData7Days());
+        console.log('Fetching user data');
         dispatch(fetchUser());
+    },
+    fetchGraphData: () => {
+        console.log('Fetching graph data');
+        dispatch(fetchCodeData7Days());
     }
 });
 

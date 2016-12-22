@@ -6,7 +6,7 @@
 const express = require('express');
 
 // Required files
-const routerJawbone = require('./jawbone');
+const { routerJawbone } = require('./jawbone');
 
 // Router creation
 const router = express.Router();

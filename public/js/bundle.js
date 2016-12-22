@@ -26358,7 +26358,8 @@
 	
 	// Required packages
 	var Routes = function Routes(_ref) {
-	    var fetchInitialData = _ref.fetchInitialData;
+	    var fetchInitialData = _ref.fetchInitialData,
+	        fetchGraphData = _ref.fetchGraphData;
 	    return _react2.default.createElement(
 	        _reactRouter.Router,
 	        { history: _reactRouter.browserHistory },
@@ -26366,7 +26367,7 @@
 	            _reactRouter.Route,
 	            { path: '/', component: _Root2.default, onEnter: fetchInitialData },
 	            _react2.default.createElement(_reactRouter.Router, { path: '/login', component: _Auth2.default }),
-	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default })
+	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default, onEnter: fetchGraphData })
 	        )
 	    );
 	};
@@ -26377,6 +26378,7 @@
 	// Required files
 	Routes.propTypes = {
 	    fetchInitialData: _react2.default.PropTypes.func,
+	    fetchGraphData: _react2.default.PropTypes.func,
 	    user: _react2.default.PropTypes.object
 	};
 	
@@ -26391,9 +26393,12 @@
 	var mapDispatch = function mapDispatch(dispatch) {
 	    return {
 	        fetchInitialData: function fetchInitialData() {
-	            console.log('Fetching the data');
-	            dispatch((0, _codeData.fetchCodeData7Days)());
+	            console.log('Fetching user data');
 	            dispatch((0, _user.fetchUser)());
+	        },
+	        fetchGraphData: function fetchGraphData() {
+	            console.log('Fetching graph data');
+	            dispatch((0, _codeData.fetchCodeData7Days)());
 	        }
 	    };
 	};

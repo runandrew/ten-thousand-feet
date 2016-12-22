@@ -6,8 +6,7 @@ const passport = require('passport');
 const JawboneStrategy = require('passport-oauth').OAuth2Strategy;
 
 // Router creation
-const router = express.Router();
-module.exports = router;
+const routerJawbone = express.Router();
 
 // Authentication parameters
 const jawboneAuth = {
@@ -16,6 +15,12 @@ const jawboneAuth = {
     authorizationURL: 'https://jawbone.com/auth/oauth2/auth',
     tokenURL: 'https://jawbone.com/auth/oauth2/token',
     callbackURL: 'https://localhost:8585/auth/jawbone/callback'
+};
+
+// Exports
+module.exports = {
+    routerJawbone,
+    jawboneAuth
 };
 
 passport.use('jawbone', new JawboneStrategy({
@@ -32,15 +37,6 @@ passport.use('jawbone', new JawboneStrategy({
     };
     const up = require('jawbone-up')(options);
 
-    up.moves.get({}, function(err, body) {
-        if (err) {
-            console.log('Error receiving Jawbone UP data');
-        } else {
-            const moveData = JSON.parse(body);
-            console.log('****** THIS IS THE MOVES GET ********', moveData.data.items.length);
-        }
-    });
-
     up.me.get({}, function(err, body) {
         if (err) {
             console.log('Error receiving Jawbone UP data');
@@ -53,9 +49,9 @@ passport.use('jawbone', new JawboneStrategy({
     });
 }));
 
-router.get('/', passport.authenticate('jawbone', { scope: ['basic_read', 'move_read'] }));
+routerJawbone.get('/', passport.authenticate('jawbone', { scope: ['basic_read', 'move_read'] }));
 
-router.get('/callback',
+routerJawbone.get('/callback',
 passport.authenticate('jawbone', {
     successRedirect: '/graphs', // or wherever
     failureRedirect: '/login' // or wherever
