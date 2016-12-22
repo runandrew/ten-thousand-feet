@@ -1,6 +1,6 @@
 // Required packages
 import axios from 'axios';
-import { past7dates } from '../../utils';
+import { past7dates, convertAllData } from '../../utils';
 
 /* -----------------    ACTIONS     ------------------ */
 const SET_DATA = 'SET_DATA';
@@ -41,15 +41,26 @@ export const fetchCodeData7Days = () => {
     return dispatch => {
         const convertedDates = past7dates();
 
-        const promiseArray = convertedDates.map(date => {
+        const promiseArrayCodeData = convertedDates.map(date => {
             return axios.get(`/api/wakatime/durations?date=${date}`)
             .then(returnedData => returnedData.data)
             .catch(console.error);
         });
 
-        return Promise.all(promiseArray)
+        const promisePhysicalData = axios.get('/api/jawbone/moves')
+        .then(returnedData => returnedData.data)
+        .catch(console.error);
+
+        return Promise.all([...promiseArrayCodeData, promisePhysicalData])
         .then(data => {
-            dispatch(setDurationData(data));
+            const allData = {
+                coding: data.slice(0, -1),
+                physical: data[data.length - 1]
+            };
+
+            convertAllData(allData);
+
+            dispatch(setDurationData(data.slice(0, -1)));
         })
         .catch(console.error);
     };

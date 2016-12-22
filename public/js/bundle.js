@@ -24673,8 +24673,10 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } // Required packages
+	
+	
 	/* -----------------    ACTIONS     ------------------ */
-	// Required packages
 	var SET_DATA = 'SET_DATA';
 	
 	/* ------------   ACTION CREATORS     ------------------ */
@@ -24718,14 +24720,25 @@
 	    return function (dispatch) {
 	        var convertedDates = (0, _utils.past7dates)();
 	
-	        var promiseArray = convertedDates.map(function (date) {
+	        var promiseArrayCodeData = convertedDates.map(function (date) {
 	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
 	                return returnedData.data;
 	            }).catch(console.error);
 	        });
 	
-	        return Promise.all(promiseArray).then(function (data) {
-	            dispatch(setDurationData(data));
+	        var promisePhysicalData = _axios2.default.get('/api/jawbone/moves').then(function (returnedData) {
+	            return returnedData.data;
+	        }).catch(console.error);
+	
+	        return Promise.all([].concat(_toConsumableArray(promiseArrayCodeData), [promisePhysicalData])).then(function (data) {
+	            var allData = {
+	                coding: data.slice(0, -1),
+	                physical: data[data.length - 1]
+	            };
+	
+	            (0, _utils.convertAllData)(allData);
+	
+	            dispatch(setDurationData(data.slice(0, -1)));
 	        }).catch(console.error);
 	    };
 	};
@@ -26253,11 +26266,103 @@
 	    });
 	
 	    function convertDate(date) {
+	        // 2016/12/10 => 2016-12-10
 	        var localDateSplit = date.toLocaleDateString().split('/');
 	        return [localDateSplit[2], localDateSplit[0], localDateSplit[1]].join('-');
 	    }
 	
 	    return mappedDates.map(convertDate);
+	};
+	
+	// ****** Date conversions ******
+	
+	// 20161222 => 12/22/2016
+	var condensedDateToSlashDate = exports.condensedDateToSlashDate = function condensedDateToSlashDate(condensedDate) {
+	    var year = condensedDate.slice(0, 4);
+	    var month = condensedDate.slice(4, 6);
+	    var day = condensedDate.slice(6, 8);
+	    return new Date(+year, +month - 1, +day).toLocaleDateString();
+	};
+	
+	// 2016122200 => Thu Dec 22 2016 13:00:00 GMT-0500 (EST)
+	var condensedDateToUTCWTime = exports.condensedDateToUTCWTime = function condensedDateToUTCWTime(condensedDate) {
+	    var year = condensedDate.slice(0, 4);
+	    var month = condensedDate.slice(4, 6);
+	    var day = condensedDate.slice(6, 8);
+	    var hour = condensedDate.slice(8, 10);
+	    return new Date(+year, +month - 1, +day, +hour);
+	};
+	
+	// 2016-12-22T05:00:00Z => 12/22/2016
+	var wakaDateToSlashDate = exports.wakaDateToSlashDate = function wakaDateToSlashDate(wakaDate) {
+	    return new Date(wakaDate).toLocaleDateString();
+	};
+	
+	// Take all of the API data from Jawbone and Wakatime and combine it into an app friendly version
+	var convertAllData = exports.convertAllData = function convertAllData(_ref) {
+	    var coding = _ref.coding,
+	        physical = _ref.physical;
+	
+	
+	    // Maps each day's coding event
+	    function mapCodeEvents(dayEvents) {
+	        return dayEvents.map(function (event) {
+	            return {
+	                duration: event.duration,
+	                project: event.project,
+	                time: new Date(event.time * 1000)
+	            };
+	        });
+	    }
+	
+	    // Takes each coding day and formats it
+	    var mappedCodeAllData = coding.map(function (day) {
+	        return {
+	            date: wakaDateToSlashDate(day.start),
+	            codingData: {
+	                branches: day.branches,
+	                hourlyTotals: mapCodeEvents(day.data)
+	            }
+	        };
+	    });
+	
+	    // Maps each day's hourly physical events
+	    function mapPhysHourlyTotals(dayHourlyTotals) {
+	        var totalStepCount = 0;
+	        var keysPhysHourlyTotals = Object.keys(dayHourlyTotals);
+	        return keysPhysHourlyTotals.map(function (hourKey) {
+	            totalStepCount += dayHourlyTotals[hourKey].steps; // Add current hour's steps to the total steps
+	
+	            return {
+	                date: condensedDateToUTCWTime(hourKey),
+	                steps: dayHourlyTotals[hourKey].steps,
+	                totalSteps: totalStepCount
+	            };
+	        });
+	    }
+	
+	    // Takes each physical day data and formats it
+	    var mappedPhysAllData = physical.items.map(function (day) {
+	        return {
+	            date: condensedDateToSlashDate('' + day.date),
+	            physicalData: {
+	                totalSteps: day.details.steps,
+	                totalDistance: day.details.km, // total distance travelled [km]
+	                hourlyTotals: mapPhysHourlyTotals(day.details.hourly_totals)
+	            }
+	        };
+	    });
+	
+	    // Take all of the data (physical and coding) and merge the common days, target are the coding days
+	    var mappedAllData = mappedCodeAllData.map(function (codeDay) {
+	        var correspondingPhysDayData = mappedPhysAllData.find(function (physDay) {
+	            return codeDay.date === physDay.date;
+	        });
+	        return Object.assign({}, codeDay, correspondingPhysDayData);
+	    });
+	    console.log('after all mapping', mappedAllData);
+	
+	    return mappedAllData;
 	};
 
 /***/ },
