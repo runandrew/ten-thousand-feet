@@ -24678,7 +24678,7 @@
 	
 	/* -----------------    ACTIONS     ------------------ */
 	var SET_DATA = 'SET_DATA';
-	var FETCH_STATUS = 'FETCH_STATUS';
+	var SET_FETCH_STATUS = 'SET_FETCH_STATUS';
 	
 	/* ------------   ACTION CREATORS     ------------------ */
 	var setDayData = function setDayData(data) {
@@ -24687,20 +24687,22 @@
 	
 	/* ------------       REDUCER     ------------------ */
 	
-	var initialData = [{
-	    date: '12/22/2016',
-	    codingData: {
-	        branches: [],
-	        hourlyTotals: [],
-	        totalCodingHours: 0
-	    },
-	    physicalData: {
-	        hourlyTotals: [],
-	        totalDistance: 0,
-	        totalSteps: 0
-	    },
+	var initialData = {
+	    allDays: [{
+	        date: '12/22/2016',
+	        codingData: {
+	            branches: [],
+	            hourlyTotals: [],
+	            totalCodingHours: 0
+	        },
+	        physicalData: {
+	            hourlyTotals: [],
+	            totalDistance: 0,
+	            totalSteps: 0
+	        }
+	    }],
 	    isFetching: true
-	}];
+	};
 	
 	function reducer() {
 	    var dayData = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialData;
@@ -24708,7 +24710,13 @@
 	
 	    switch (action.type) {
 	        case SET_DATA:
-	            return action.data;
+	            {
+	                return Object.assign({}, dayData, { allDays: action.data, isFetching: false });
+	            }
+	        case SET_FETCH_STATUS:
+	            {
+	                return Object.assign({}, dayData, { isFetching: action.data });
+	            }
 	        default:
 	            return dayData;
 	    }
@@ -31514,27 +31522,33 @@
 	
 	var _SingleGraph2 = _interopRequireDefault(_SingleGraph);
 	
+	var _LoadingIcon = __webpack_require__(314);
+	
+	var _LoadingIcon2 = _interopRequireDefault(_LoadingIcon);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
+	// Required files
+	// Required libraries
 	var Graphs = function Graphs(props) {
+	    console.log('allDays', props.allDays);
 	    return _react2.default.createElement(
 	        'div',
 	        null,
-	        props.dayData.map(function (day, i) {
+	        !props.isFetching ? props.allDays.map(function (day, i) {
 	            return _react2.default.createElement(_SingleGraph2.default, { dayIndex: i, key: i });
-	        })
+	        }) : _react2.default.createElement(_LoadingIcon2.default, null)
 	    );
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	// Required files
-	// Required libraries
 	var mapProps = function mapProps(state, ownProps) {
 	    return {
-	        dayData: state.dayData
+	        allDays: state.dayData.allDays,
+	        isFetching: state.dayData.isFetching
 	    };
 	};
 	var mapDispatch = null;
@@ -31721,7 +31735,7 @@
 	
 	var mapProps = function mapProps(state, ownProps) {
 	    return {
-	        dayDataSingle: state.dayData[ownProps.dayIndex],
+	        dayDataSingle: state.dayData.allDays[ownProps.dayIndex],
 	        graphSettings: _singleGraph.graphSettings,
 	        dayIndex: ownProps.dayIndex
 	    };
@@ -32051,6 +32065,61 @@
 	// <div className="row center">
 	//   <Link href="/login" id="download-button" className="btn-large waves-effect waves-light blue lighten-4 black-text">Get Started</Link>
 	// </div>
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	var LoadingIcon = function LoadingIcon(props) {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "row", id: "loader" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "col s4 offset-s4 center" },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "preloader-wrapper big active" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "spinner-layer spinner-blue" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "circle-clipper left" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "gap-patch" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "circle-clipper right" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    )
+	                )
+	            )
+	        )
+	    );
+	}; // Required packages
+	exports.default = LoadingIcon;
+	
+	/* -----------------    CONTAINER     ------------------ */
 
 /***/ }
 /******/ ]);

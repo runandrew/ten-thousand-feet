@@ -84,7 +84,7 @@ SingleGraph.propTypes = {
 
 const mapProps = (state, ownProps) => {
     return {
-        dayDataSingle: state.dayData[ownProps.dayIndex],
+        dayDataSingle: state.dayData.allDays[ownProps.dayIndex],
         graphSettings,
         dayIndex: ownProps.dayIndex
     };

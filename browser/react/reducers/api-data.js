@@ -4,31 +4,38 @@ import { past7dates, convertAllData } from '../../utils';
 
 /* -----------------    ACTIONS     ------------------ */
 const SET_DATA = 'SET_DATA';
-const FETCH_STATUS = 'FETCH_STATUS';
+const SET_FETCH_STATUS = 'SET_FETCH_STATUS';
 
 /* ------------   ACTION CREATORS     ------------------ */
 const setDayData = data => ({ type: SET_DATA, data });
 
 /* ------------       REDUCER     ------------------ */
 
-const initialData = [{
-    date: '12/22/2016',
-    codingData: {
-        branches: [],
-        hourlyTotals: [],
-        totalCodingHours: 0
-    },
-    physicalData: {
-        hourlyTotals: [],
-        totalDistance: 0,
-        totalSteps: 0
-    },
+const initialData = {
+    allDays: [{
+        date: '12/22/2016',
+        codingData: {
+            branches: [],
+            hourlyTotals: [],
+            totalCodingHours: 0
+        },
+        physicalData: {
+            hourlyTotals: [],
+            totalDistance: 0,
+            totalSteps: 0
+        }
+    }],
     isFetching: true
-}];
+};
 
 export default function reducer (dayData = initialData, action) {
     switch (action.type) {
-        case SET_DATA: return action.data;
+        case SET_DATA: {
+            return Object.assign({}, dayData, { allDays: action.data, isFetching: false });
+        }
+        case SET_FETCH_STATUS: {
+            return Object.assign({}, dayData, { isFetching: action.data });
+        }
         default: return dayData;
     }
 }
