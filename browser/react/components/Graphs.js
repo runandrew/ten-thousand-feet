@@ -9,7 +9,6 @@ import LoadingIcon from './LoadingIcon';
 /* -----------------    COMPONENT     ------------------ */
 
 const Graphs = (props) => {
-    console.log('allDays', props.allDays)
     return (
         <div>
         { !props.isFetching ? props.allDays.map((day, i) => {

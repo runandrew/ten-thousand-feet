@@ -26312,6 +26312,7 @@
 	        physical = _ref.physical;
 	
 	
+	    console.log('this is the physical data', coding, physical);
 	    // Maps each day's coding event
 	    function mapCodeEvents(dayEvents) {
 	        var totalCodingTime = 0;
@@ -26365,7 +26366,7 @@
 	            physicalData: {
 	                totalSteps: day.details.steps,
 	                totalDistance: day.details.km, // total distance travelled [km]
-	                hourlyTotals: mapPhysHourlyTotals(day.details.hourly_totals)
+	                hourlyTotals: day.details.hourly_totals ? mapPhysHourlyTotals(day.details.hourly_totals) : []
 	            }
 	        };
 	    });
@@ -26458,7 +26459,7 @@
 	
 	var _Root2 = _interopRequireDefault(_Root);
 	
-	var _Auth = __webpack_require__(312);
+	var _Auth = __webpack_require__(313);
 	
 	var _Auth2 = _interopRequireDefault(_Auth);
 	
@@ -26466,7 +26467,7 @@
 	
 	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
-	var _Landing = __webpack_require__(313);
+	var _Landing = __webpack_require__(314);
 	
 	var _Landing2 = _interopRequireDefault(_Landing);
 	
@@ -31522,7 +31523,7 @@
 	
 	var _SingleGraph2 = _interopRequireDefault(_SingleGraph);
 	
-	var _LoadingIcon = __webpack_require__(314);
+	var _LoadingIcon = __webpack_require__(312);
 	
 	var _LoadingIcon2 = _interopRequireDefault(_LoadingIcon);
 	
@@ -31533,7 +31534,6 @@
 	// Required files
 	// Required libraries
 	var Graphs = function Graphs(props) {
-	    console.log('allDays', props.allDays);
 	    return _react2.default.createElement(
 	        'div',
 	        null,
@@ -31938,6 +31938,61 @@
 /* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	var LoadingIcon = function LoadingIcon(props) {
+	    return _react2.default.createElement(
+	        "div",
+	        { className: "row", id: "loader" },
+	        _react2.default.createElement(
+	            "div",
+	            { className: "col s4 offset-s4 center" },
+	            _react2.default.createElement(
+	                "div",
+	                { className: "preloader-wrapper big active" },
+	                _react2.default.createElement(
+	                    "div",
+	                    { className: "spinner-layer spinner-blue" },
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "circle-clipper left" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "gap-patch" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    ),
+	                    _react2.default.createElement(
+	                        "div",
+	                        { className: "circle-clipper right" },
+	                        _react2.default.createElement("div", { className: "circle" })
+	                    )
+	                )
+	            )
+	        )
+	    );
+	}; // Required packages
+	exports.default = LoadingIcon;
+	
+	/* -----------------    CONTAINER     ------------------ */
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -31994,7 +32049,7 @@
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
 
 /***/ },
-/* 313 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32065,61 +32120,6 @@
 	// <div className="row center">
 	//   <Link href="/login" id="download-button" className="btn-large waves-effect waves-light blue lighten-4 black-text">Get Started</Link>
 	// </div>
-
-/***/ },
-/* 314 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	
-	var _react = __webpack_require__(1);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	/* -----------------    COMPONENT     ------------------ */
-	
-	var LoadingIcon = function LoadingIcon(props) {
-	    return _react2.default.createElement(
-	        "div",
-	        { className: "row", id: "loader" },
-	        _react2.default.createElement(
-	            "div",
-	            { className: "col s4 offset-s4 center" },
-	            _react2.default.createElement(
-	                "div",
-	                { className: "preloader-wrapper big active" },
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "spinner-layer spinner-blue" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "circle-clipper left" },
-	                        _react2.default.createElement("div", { className: "circle" })
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "gap-patch" },
-	                        _react2.default.createElement("div", { className: "circle" })
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "circle-clipper right" },
-	                        _react2.default.createElement("div", { className: "circle" })
-	                    )
-	                )
-	            )
-	        )
-	    );
-	}; // Required packages
-	exports.default = LoadingIcon;
-	
-	/* -----------------    CONTAINER     ------------------ */
 
 /***/ }
 /******/ ]);

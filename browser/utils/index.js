@@ -58,6 +58,7 @@ export const past7dates = () => {
 // Take all of the API data from Jawbone and Wakatime and combine it into an app friendly version
 export const convertAllData = ({ coding, physical }) => {
 
+    console.log('this is the physical data', coding, physical);
     // Maps each day's coding event
     function mapCodeEvents(dayEvents) {
         let totalCodingTime = 0;
@@ -111,7 +112,7 @@ export const convertAllData = ({ coding, physical }) => {
             physicalData: {
                 totalSteps: day.details.steps,
                 totalDistance: day.details.km, // total distance travelled [km]
-                hourlyTotals: mapPhysHourlyTotals(day.details.hourly_totals)
+                hourlyTotals: day.details.hourly_totals ? mapPhysHourlyTotals(day.details.hourly_totals) : []
             }
         };
     });
