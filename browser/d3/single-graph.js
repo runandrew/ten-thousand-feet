@@ -89,7 +89,7 @@ export const d3SingleGraph = () => {
             .range([svgHeight - padding, 0 + padding]);
 
             const yScaleSteps = d3.scaleLinear()
-            .domain([0, 10000])
+            .domain([0, 5000])
             .range([svgHeight - padding, 0 + padding]);
 
             return { xScale, yScale, yScaleSteps };
@@ -151,14 +151,14 @@ export const d3SingleGraph = () => {
             // Create line
             const line = d3.line()
             .x(data => xScale(Date.parse(data.date)))
-            .y(data => yScaleSteps(data.totalSteps))
+            .y(data => yScaleSteps(data.steps))
             .curve(d3.curveCatmullRom.alpha(0.5));
 
             // Create area under line`
             const area = d3.area()
             .x(data => xScale(Date.parse(data.date)))
             .y0(svgHeight - padding)
-            .y1(data => yScaleSteps(data.totalSteps))
+            .y1(data => yScaleSteps(data.steps))
             .curve(d3.curveCatmullRom.alpha(0.5));
 
             svg.append('g')

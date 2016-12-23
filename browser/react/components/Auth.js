@@ -9,8 +9,12 @@ const Auth = () => {
     return (
         <div className="row">
             <div className="col s6 offset-s3 center">
-                <h5>Please sign in:</h5>
-                <a href="/auth/jawbone/" className="waves-effect waves-light btn">Authenticate with UP</a>
+                <div className="card grey lighten-5">
+                    <div className="card-content" id="mainSet">
+                        <p className="card-title">Please sign in:</p>
+                        <a href="/auth/jawbone/" className="waves-effect waves-light btn">Authenticate with UP</a>
+                    </div>
+                </div>
             </div>
         </div>
     );

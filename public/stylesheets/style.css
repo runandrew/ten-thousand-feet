@@ -56,3 +56,14 @@
   fill: rgba(198, 106, 44, 0.2);
   pointer-events: none;
 }
+
+#index-banner {
+    background-image: url("/img/landing-splash.jpg");
+    background-size: cover;
+    height: 800px;
+    padding-top: 100px;
+}
+
+.cardStatsSpacing {
+    margin: 0 1rem;
+}

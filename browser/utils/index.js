@@ -60,22 +60,31 @@ export const convertAllData = ({ coding, physical }) => {
 
     // Maps each day's coding event
     function mapCodeEvents(dayEvents) {
-        return dayEvents.map(event => {
+        let totalCodingTime = 0;
+        const mappedCodeEvents = dayEvents.map(event => {
+            totalCodingTime += event.duration; // keep track of total time coded
             return {
                 duration: event.duration,
                 project: event.project,
                 time: new Date(event.time * 1000)
             };
         });
+
+        return {
+            mappedCodeEvents,
+            totalCodingTime: (totalCodingTime / 60 / 60).toFixed(1) // Return coding hours to one decimal
+        };
     }
 
     // Takes each coding day and formats it
     const mappedCodeAllData = coding.map(day => {
+        const mappedCodeHourlyTotals = mapCodeEvents(day.data);
         return {
             date: wakaDateToSlashDate(day.start),
             codingData: {
                 branches: day.branches,
-                hourlyTotals: mapCodeEvents(day.data)
+                hourlyTotals: mappedCodeHourlyTotals.mappedCodeEvents,
+                totalCodingHours: mappedCodeHourlyTotals.totalCodingTime
             }
         };
     });
