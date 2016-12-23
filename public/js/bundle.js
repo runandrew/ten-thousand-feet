@@ -24678,6 +24678,7 @@
 	
 	/* -----------------    ACTIONS     ------------------ */
 	var SET_DATA = 'SET_DATA';
+	var FETCH_STATUS = 'FETCH_STATUS';
 	
 	/* ------------   ACTION CREATORS     ------------------ */
 	var setDayData = function setDayData(data) {
@@ -24697,7 +24698,8 @@
 	        hourlyTotals: [],
 	        totalDistance: 0,
 	        totalSteps: 0
-	    }
+	    },
+	    isFetching: true
 	}];
 	
 	function reducer() {

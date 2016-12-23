@@ -4,6 +4,7 @@ import { past7dates, convertAllData } from '../../utils';
 
 /* -----------------    ACTIONS     ------------------ */
 const SET_DATA = 'SET_DATA';
+const FETCH_STATUS = 'FETCH_STATUS';
 
 /* ------------   ACTION CREATORS     ------------------ */
 const setDayData = data => ({ type: SET_DATA, data });
@@ -21,7 +22,8 @@ const initialData = [{
         hourlyTotals: [],
         totalDistance: 0,
         totalSteps: 0
-    }
+    },
+    isFetching: true
 }];
 
 export default function reducer (dayData = initialData, action) {
