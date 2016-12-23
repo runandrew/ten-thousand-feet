@@ -24690,7 +24690,8 @@
 	    date: '12/22/2016',
 	    codingData: {
 	        branches: [],
-	        hourlyTotals: []
+	        hourlyTotals: [],
+	        totalCodingHours: 0
 	    },
 	    physicalData: {
 	        hourlyTotals: [],
@@ -26303,22 +26304,31 @@
 	
 	    // Maps each day's coding event
 	    function mapCodeEvents(dayEvents) {
-	        return dayEvents.map(function (event) {
+	        var totalCodingTime = 0;
+	        var mappedCodeEvents = dayEvents.map(function (event) {
+	            totalCodingTime += event.duration; // keep track of total time coded
 	            return {
 	                duration: event.duration,
 	                project: event.project,
 	                time: new Date(event.time * 1000)
 	            };
 	        });
+	
+	        return {
+	            mappedCodeEvents: mappedCodeEvents,
+	            totalCodingTime: (totalCodingTime / 60 / 60).toFixed(1) // Return coding hours to one decimal
+	        };
 	    }
 	
 	    // Takes each coding day and formats it
 	    var mappedCodeAllData = coding.map(function (day) {
+	        var mappedCodeHourlyTotals = mapCodeEvents(day.data);
 	        return {
 	            date: wakaDateToSlashDate(day.start),
 	            codingData: {
 	                branches: day.branches,
-	                hourlyTotals: mapCodeEvents(day.data)
+	                hourlyTotals: mappedCodeHourlyTotals.mappedCodeEvents,
+	                totalCodingHours: mappedCodeHourlyTotals.totalCodingTime
 	            }
 	        };
 	    });
@@ -26446,6 +26456,10 @@
 	
 	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
+	var _Landing = __webpack_require__(313);
+	
+	var _Landing2 = _interopRequireDefault(_Landing);
+	
 	var _apiData = __webpack_require__(225);
 	
 	var _user = __webpack_require__(252);
@@ -26457,7 +26471,8 @@
 	
 	// -- Functions
 	
-	// Required packages
+	
+	// Required files
 	var Routes = function Routes(_ref) {
 	    var fetchInitialData = _ref.fetchInitialData,
 	        fetchGraphData = _ref.fetchGraphData;
@@ -26468,15 +26483,15 @@
 	            _reactRouter.Route,
 	            { path: '/', component: _Root2.default, onEnter: fetchInitialData },
 	            _react2.default.createElement(_reactRouter.Router, { path: '/login', component: _Auth2.default }),
-	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default, onEnter: fetchGraphData })
+	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default, onEnter: fetchGraphData }),
+	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Landing2.default })
 	        )
 	    );
 	};
 	
 	// PropType validaiton
 	
-	
-	// Required files
+	// Required packages
 	Routes.propTypes = {
 	    fetchInitialData: _react2.default.PropTypes.func,
 	    fetchGraphData: _react2.default.PropTypes.func,
@@ -31636,6 +31651,16 @@
 	                                    'a',
 	                                    { href: '#' },
 	                                    'Share'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'cardStatsSpacing' },
+	                                    this.props.dayDataSingle.physicalData.totalSteps + ' steps total'
+	                                ),
+	                                _react2.default.createElement(
+	                                    'span',
+	                                    { className: 'cardStatsSpacing' },
+	                                    this.props.dayDataSingle.codingData.totalCodingHours + ' ' + (this.props.dayDataSingle.codingData.totalCodingHours <= 1 && this.props.dayDataSingle.codingData.totalCodingHours > 0 ? 'hour' : 'hours') + ' coding'
 	                                )
 	                            )
 	                        ),
@@ -31789,7 +31814,7 @@
 	
 	            var yScale = d3.scaleLinear().domain([0, 5]).range([svgHeight - padding, 0 + padding]);
 	
-	            var yScaleSteps = d3.scaleLinear().domain([0, 10000]).range([svgHeight - padding, 0 + padding]);
+	            var yScaleSteps = d3.scaleLinear().domain([0, 5000]).range([svgHeight - padding, 0 + padding]);
 	
 	            return { xScale: xScale, yScale: yScale, yScaleSteps: yScaleSteps };
 	        },
@@ -31846,14 +31871,14 @@
 	            var line = d3.line().x(function (data) {
 	                return xScale(Date.parse(data.date));
 	            }).y(function (data) {
-	                return yScaleSteps(data.totalSteps);
+	                return yScaleSteps(data.steps);
 	            }).curve(d3.curveCatmullRom.alpha(0.5));
 	
 	            // Create area under line`
 	            var area = d3.area().x(function (data) {
 	                return xScale(Date.parse(data.date));
 	            }).y0(svgHeight - padding).y1(function (data) {
-	                return yScaleSteps(data.totalSteps);
+	                return yScaleSteps(data.steps);
 	            }).curve(d3.curveCatmullRom.alpha(0.5));
 	
 	            svg.append('g').attr('id', 'bars').selectAll('rect').data(codingActivity).enter().append('rect').attr('x', function (data) {
@@ -31924,14 +31949,22 @@
 	            'div',
 	            { className: 'col s6 offset-s3 center' },
 	            _react2.default.createElement(
-	                'h5',
-	                null,
-	                'Please sign in:'
-	            ),
-	            _react2.default.createElement(
-	                'a',
-	                { href: '/auth/jawbone/', className: 'waves-effect waves-light btn' },
-	                'Authenticate with UP'
+	                'div',
+	                { className: 'card grey lighten-5' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'card-content', id: 'mainSet' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        { className: 'card-title' },
+	                        'Please sign in:'
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { href: '/auth/jawbone/', className: 'waves-effect waves-light btn' },
+	                        'Authenticate with UP'
+	                    )
+	                )
 	            )
 	        )
 	    );
@@ -31943,6 +31976,79 @@
 	var mapDispatch = null;
 	
 	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(Auth);
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(254);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Required files
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	// Required packages
+	var Landing = function Landing() {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'section no-pad-bot', id: 'index-banner' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'col m5 s10 offset-m1' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'card grey lighten-5' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'card-content', id: 'mainSet' },
+	                        _react2.default.createElement(
+	                            'h3',
+	                            { className: 'grey-text text-darken-3' },
+	                            'Bring Balance to Your Life'
+	                        ),
+	                        _react2.default.createElement(
+	                            'h4',
+	                            { className: 'grey-text' },
+	                            'Get a high-level overview of your day'
+	                        ),
+	                        _react2.default.createElement(
+	                            _reactRouter.Link,
+	                            { to: '/login', className: 'waves-effect waves-light btn center' },
+	                            'Get Started'
+	                        )
+	                    )
+	                )
+	            )
+	        )
+	    );
+	};
+	
+	exports.default = Landing;
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	// <h1 className="header center black-text">Bring a Balance to Your Life</h1>
+	// <div className="row center">
+	//   <h5 className="header col s12 light">Get a high-level overview of your day</h5>
+	// </div>
+	// <div className="row center">
+	//   <Link href="/login" id="download-button" className="btn-large waves-effect waves-light blue lighten-4 black-text">Get Started</Link>
+	// </div>
 
 /***/ }
 /******/ ]);

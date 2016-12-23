@@ -14,7 +14,8 @@ const initialData = [{
     date: '12/22/2016',
     codingData: {
         branches: [],
-        hourlyTotals: []
+        hourlyTotals: [],
+        totalCodingHours: 0
     },
     physicalData: {
         hourlyTotals: [],

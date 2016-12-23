@@ -38,7 +38,7 @@ class SingleGraph extends React.Component {
         this.graph.update(this.state.svg,
             { graphSettings, dayIndex: this.props.dayIndex },
             { dayDataSingle: this.props.dayDataSingle }
-            );
+        );
     }
 
     getCurrentDay() {
@@ -48,24 +48,26 @@ class SingleGraph extends React.Component {
     render() {
         return (
             <div className="section no-pad-bot graphContainer" id={`graphContainer-${this.props.dayIndex}`} >
-            <div className="container">
-            <div className="row center">
-            <div className="card grey lighten-5">
-            <div className="card-content" id="mainSet">
-            <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.props.dayDataSingle.date }</span>
-            <div id={`graph-${this.props.dayIndex}`} />
-            </div>
-            <div className="card-action">
-            <a href="#">Details</a>
-            <a href="#">Share</a>
-            </div>
-            </div>
-            <div id={`tooltip-${this.props.dayIndex}`} className="hidden tooltip">
-            <p><strong>Project: </strong><span className="value">100</span></p>
-            <p><strong>Duration: </strong><span className="duration">100</span> mins</p>
-            </div>
-            </div>
-            </div>
+                <div className="container">
+                    <div className="row center">
+                        <div className="card grey lighten-5">
+                            <div className="card-content" id="mainSet">
+                            <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.props.dayDataSingle.date }</span>
+                            <div id={`graph-${this.props.dayIndex}`} />
+                            </div>
+                            <div className="card-action">
+                            <a href="#">Details</a>
+                            <a href="#">Share</a>
+                            <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.physicalData.totalSteps} steps total` }</span>
+                            <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.codingData.totalCodingHours} ${this.props.dayDataSingle.codingData.totalCodingHours <= 1 && this.props.dayDataSingle.codingData.totalCodingHours > 0 ? 'hour' : 'hours'} coding` }</span>
+                            </div>
+                        </div>
+                        <div id={`tooltip-${this.props.dayIndex}`} className="hidden tooltip">
+                            <p><strong>Project: </strong><span className="value">100</span></p>
+                            <p><strong>Duration: </strong><span className="duration">100</span> mins</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
