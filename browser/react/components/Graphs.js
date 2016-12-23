@@ -4,15 +4,17 @@ import { connect } from 'react-redux';
 
 // Required files
 import SingleGraph from './SingleGraph';
+import LoadingIcon from './LoadingIcon';
 
 /* -----------------    COMPONENT     ------------------ */
 
 const Graphs = (props) => {
+    console.log('allDays', props.allDays)
     return (
         <div>
-        { props.dayData.map((day, i) => {
+        { !props.isFetching ? props.allDays.map((day, i) => {
             return ( <SingleGraph dayIndex={i} key={i} /> );
-        }) }
+        }) : <LoadingIcon /> }
         </div>
     );
 };
@@ -21,7 +23,8 @@ const Graphs = (props) => {
 
 const mapProps = (state, ownProps) => {
     return {
-        dayData: state.dayData,
+        allDays: state.dayData.allDays,
+        isFetching: state.dayData.isFetching
     };
 };
 const mapDispatch = null;

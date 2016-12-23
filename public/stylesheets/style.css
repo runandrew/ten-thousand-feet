@@ -67,3 +67,7 @@
 .cardStatsSpacing {
     margin: 0 1rem;
 }
+
+#loader {
+    margin-top: 100px;
+}
