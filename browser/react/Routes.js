@@ -8,6 +8,7 @@ import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 import Root from './components/Root';
 import Auth from './components/Auth';
 import Graphs from './components/Graphs';
+import GraphDetail from './components/GraphDetail';
 import Landing from './components/Landing';
 
 // -- Functions
@@ -20,6 +21,7 @@ const Routes = ({ fetchInitialData, fetchGraphData }) => (
         <Route path="/" component={Root} onEnter={ fetchInitialData }>
             <Router path="/login" component={Auth} />
             <Router path="/graphs" component={Graphs} onEnter={ fetchGraphData }/>
+            <Router path="/graphs/:dayId" component={GraphDetail} />
             <IndexRoute component={Landing} />
         </Route>
     </Router>

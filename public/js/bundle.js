@@ -26467,6 +26467,10 @@
 	
 	var _Graphs2 = _interopRequireDefault(_Graphs);
 	
+	var _GraphDetail = __webpack_require__(315);
+	
+	var _GraphDetail2 = _interopRequireDefault(_GraphDetail);
+	
 	var _Landing = __webpack_require__(314);
 	
 	var _Landing2 = _interopRequireDefault(_Landing);
@@ -26482,8 +26486,7 @@
 	
 	// -- Functions
 	
-	
-	// Required files
+	// Required packages
 	var Routes = function Routes(_ref) {
 	    var fetchInitialData = _ref.fetchInitialData,
 	        fetchGraphData = _ref.fetchGraphData;
@@ -26495,6 +26498,7 @@
 	            { path: '/', component: _Root2.default, onEnter: fetchInitialData },
 	            _react2.default.createElement(_reactRouter.Router, { path: '/login', component: _Auth2.default }),
 	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs', component: _Graphs2.default, onEnter: fetchGraphData }),
+	            _react2.default.createElement(_reactRouter.Router, { path: '/graphs/:dayId', component: _GraphDetail2.default }),
 	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Landing2.default })
 	        )
 	    );
@@ -26502,7 +26506,8 @@
 	
 	// PropType validaiton
 	
-	// Required packages
+	
+	// Required files
 	Routes.propTypes = {
 	    fetchInitialData: _react2.default.PropTypes.func,
 	    fetchGraphData: _react2.default.PropTypes.func,
@@ -31573,6 +31578,8 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
+	var _reactRouter = __webpack_require__(254);
+	
 	var _singleGraph = __webpack_require__(311);
 	
 	var _utils = __webpack_require__(251);
@@ -31659,13 +31666,13 @@
 	                                'div',
 	                                { className: 'card-action' },
 	                                _react2.default.createElement(
-	                                    'a',
-	                                    { href: '#' },
+	                                    _reactRouter.Link,
+	                                    { to: '/graphs/' + this.props.dayIndex },
 	                                    'Details'
 	                                ),
 	                                _react2.default.createElement(
-	                                    'a',
-	                                    { href: '#' },
+	                                    _reactRouter.Link,
+	                                    { to: '#' },
 	                                    'Share'
 	                                ),
 	                                _react2.default.createElement(
@@ -32120,6 +32127,57 @@
 	// <div className="row center">
 	//   <Link href="/login" id="download-button" className="btn-large waves-effect waves-light blue lighten-4 black-text">Get Started</Link>
 	// </div>
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(178);
+	
+	var _SingleGraph = __webpack_require__(310);
+	
+	var _SingleGraph2 = _interopRequireDefault(_SingleGraph);
+	
+	var _LoadingIcon = __webpack_require__(312);
+	
+	var _LoadingIcon2 = _interopRequireDefault(_LoadingIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/* -----------------    COMPONENT     ------------------ */
+	
+	// Required files
+	// Required libraries
+	var GraphDetail = function GraphDetail(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        null,
+	        !props.isFetching ? _react2.default.createElement(_SingleGraph2.default, { dayIndex: +props.dayId }) : _react2.default.createElement(_LoadingIcon2.default, null)
+	    );
+	};
+	
+	/* -----------------    CONTAINER     ------------------ */
+	
+	var mapProps = function mapProps(state, ownProps) {
+	    return {
+	        allDays: state.dayData.allDays,
+	        isFetching: state.dayData.isFetching,
+	        dayId: ownProps.routeParams.dayId
+	    };
+	};
+	var mapDispatch = null;
+	
+	exports.default = (0, _reactRedux.connect)(mapProps, mapDispatch)(GraphDetail);
 
 /***/ }
 /******/ ]);

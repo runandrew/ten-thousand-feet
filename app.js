@@ -76,7 +76,7 @@ app.use('/auth', routerAuth);
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/materialize', express.static(path.join(__dirname, '/node_modules/materialize-css/dist')));
 
-var validFrontendRoutes = ['/', '/login', '/graphs'];
+var validFrontendRoutes = ['/', '/login', '/graphs', '/graphs/:dayId'];
 var indexPath = path.join(__dirname, '/public', 'index.html');
 validFrontendRoutes.forEach(function (stateRoute) {
     app.get(stateRoute, function (req, res) {

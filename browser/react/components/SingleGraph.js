@@ -2,6 +2,7 @@
 // Required packages
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 // Required files
 import { graphSettings, d3SingleGraph } from '../../d3/single-graph';
@@ -56,8 +57,8 @@ class SingleGraph extends React.Component {
                             <div id={`graph-${this.props.dayIndex}`} />
                             </div>
                             <div className="card-action">
-                            <a href="#">Details</a>
-                            <a href="#">Share</a>
+                            <Link to={`/graphs/${this.props.dayIndex}`}>Details</Link>
+                            <Link to="#">Share</Link>
                             <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.physicalData.totalSteps} steps total` }</span>
                             <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.codingData.totalCodingHours} ${this.props.dayDataSingle.codingData.totalCodingHours <= 1 && this.props.dayDataSingle.codingData.totalCodingHours > 0 ? 'hour' : 'hours'} coding` }</span>
                             </div>
