@@ -25,13 +25,14 @@ const initialData = {
             totalSteps: 0
         }
     }],
-    isFetching: true
+    isFetching: true,
+    lastFetched: new Date(0)
 };
 
 export default function reducer (dayData = initialData, action) {
     switch (action.type) {
         case SET_DATA: {
-            return Object.assign({}, dayData, { allDays: action.data, isFetching: false });
+            return Object.assign({}, dayData, { allDays: action.data, isFetching: false, lastFetched: new Date() });
         }
         case SET_FETCH_STATUS: {
             return Object.assign({}, dayData, { isFetching: action.data });
@@ -44,6 +45,7 @@ export default function reducer (dayData = initialData, action) {
 
 export const fetchCodeData7Days = () => {
     return dispatch => {
+
         const convertedDates = past7dates();
 
         const promiseArrayCodeData = convertedDates.map(date => {

@@ -58,12 +58,16 @@ export const past7dates = () => {
 // Take all of the API data from Jawbone and Wakatime and combine it into an app friendly version
 export const convertAllData = ({ coding, physical }) => {
 
-    console.log('this is the physical data', coding, physical);
     // Maps each day's coding event
     function mapCodeEvents(dayEvents) {
         let totalCodingTime = 0;
+        let totalCodingSecondsPerProject = {};
         const mappedCodeEvents = dayEvents.map(event => {
             totalCodingTime += event.duration; // keep track of total time coded
+
+            if (totalCodingSecondsPerProject[event.project]) totalCodingSecondsPerProject[event.project] += event.duration;
+            else totalCodingSecondsPerProject[event.project] = event.duration;
+
             return {
                 duration: event.duration,
                 project: event.project,
@@ -73,7 +77,8 @@ export const convertAllData = ({ coding, physical }) => {
 
         return {
             mappedCodeEvents,
-            totalCodingTime: (totalCodingTime / 60 / 60).toFixed(1) // Return coding hours to one decimal
+            totalCodingTime: (totalCodingTime / 60 / 60).toFixed(1),  // Return coding hours to one decimal
+            totalCodingSecondsPerProject
         };
     }
 
@@ -85,7 +90,8 @@ export const convertAllData = ({ coding, physical }) => {
             codingData: {
                 branches: day.branches,
                 hourlyTotals: mappedCodeHourlyTotals.mappedCodeEvents,
-                totalCodingHours: mappedCodeHourlyTotals.totalCodingTime
+                totalCodingHours: mappedCodeHourlyTotals.totalCodingTime,
+                totalCodingSecondsPerProject: mappedCodeHourlyTotals.totalCodingSecondsPerProject
             }
         };
     });

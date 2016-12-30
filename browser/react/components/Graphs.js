@@ -10,10 +10,13 @@ import LoadingIcon from './LoadingIcon';
 
 const Graphs = (props) => {
     return (
-        <div>
-        { !props.isFetching ? props.allDays.map((day, i) => {
-            return ( <SingleGraph dayIndex={i} key={i} /> );
-        }) : <LoadingIcon /> }
+        <div className="section no-pad-bot" >
+            <div className="container">
+                { !props.isFetching ? props.allDays.map((day, i) => {
+                    return ( <SingleGraph dayIndex={i} key={i} /> );
+                }) : <LoadingIcon /> }
+
+            </div>
         </div>
     );
 };
