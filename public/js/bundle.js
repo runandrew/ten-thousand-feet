@@ -31501,10 +31501,10 @@
 	        value: function render() {
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'row center' },
+	                { className: 'row center graphContainer' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'card grey lighten-5 graphContainer', id: 'graphContainer-' + this.props.dayIndex },
+	                    { className: 'card grey lighten-5', id: 'graphContainer-' + this.props.dayIndex },
 	                    _react2.default.createElement(
 	                        'div',
 	                        { className: 'card-content', id: 'mainSet' },
@@ -32108,7 +32108,7 @@
 	        _react2.default.createElement(
 	            'h4',
 	            null,
-	            'Goal Progress'
+	            'Daily Goal Progress'
 	        ),
 	        _react2.default.createElement(
 	            'div',
@@ -32445,61 +32445,36 @@
 	    value: true
 	});
 	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
 	var _react = __webpack_require__(1);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRedux = __webpack_require__(178);
 	
-	var _reactRouter = __webpack_require__(253);
-	
-	var _donutGraph = __webpack_require__(316);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-	
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-	// Required packages
-	
-	
 	// Required files
-	// import { graphSettings, d3SingleGraph } from '../../d3/single-graph';
-	
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	var ProjectsWorkedOn = function (_React$Component) {
-	    _inherits(ProjectsWorkedOn, _React$Component);
-	
-	    function ProjectsWorkedOn() {
-	        _classCallCheck(this, ProjectsWorkedOn);
-	
-	        return _possibleConstructorReturn(this, (ProjectsWorkedOn.__proto__ || Object.getPrototypeOf(ProjectsWorkedOn)).apply(this, arguments));
-	    }
-	
-	    _createClass(ProjectsWorkedOn, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {}
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-	
-	            return _react2.default.createElement(
+	// Required packages
+	var ProjectsWorkedOn = function ProjectsWorkedOn(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'card grey lighten-5 graphContainer' },
+	        _react2.default.createElement(
+	            'div',
+	            { className: 'card-content' },
+	            _react2.default.createElement(
 	                'div',
-	                { className: 'card grey lighten-5 graphContainer' },
+	                { className: 'row' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'card-content' },
+	                    { className: 'col s6 offset-s3' },
 	                    _react2.default.createElement(
 	                        'ul',
 	                        { className: 'collection with-header' },
-	                        Object.keys(this.props.dayData.codingData.totalCodingSecondsPerProject).map(function (key, i) {
+	                        Object.keys(props.dayData.codingData.totalCodingSecondsPerProject).map(function (key, i) {
 	                            return _react2.default.createElement(
 	                                'li',
 	                                { className: 'collection-item', key: i },
@@ -32510,7 +32485,7 @@
 	                                    _react2.default.createElement(
 	                                        'span',
 	                                        { className: 'secondary-content' },
-	                                        (_this2.props.dayData.codingData.totalCodingSecondsPerProject[key] / 60).toFixed(1),
+	                                        (props.dayData.codingData.totalCodingSecondsPerProject[key] / 60).toFixed(0),
 	                                        ' mins'
 	                                    )
 	                                )
@@ -32518,18 +32493,15 @@
 	                        })
 	                    )
 	                )
-	            );
-	        }
-	    }]);
-	
-	    return ProjectsWorkedOn;
-	}(_react2.default.Component);
+	            )
+	        )
+	    );
+	};
 	
 	// PropType validaiton
-	
-	
 	ProjectsWorkedOn.propTypes = {
-	    dayIndex: _react2.default.PropTypes.number
+	    dayIndex: _react2.default.PropTypes.number,
+	    dayData: _react2.default.PropTypes.object
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */

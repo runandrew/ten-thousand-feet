@@ -15,7 +15,7 @@ const GraphDetail = (props) => {
         <div className="center">
             <h4>Overview</h4>
             <SingleGraph dayIndex={+props.dayId} />
-            <h4>Goal Progress</h4>
+            <h4>Daily Goal Progress</h4>
             <div className="row center">
 
                 <div className="col s6">

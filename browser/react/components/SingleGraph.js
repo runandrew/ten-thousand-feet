@@ -48,8 +48,8 @@ class SingleGraph extends React.Component {
 
     render() {
         return (
-            <div className="row center">
-                <div className="card grey lighten-5 graphContainer" id={`graphContainer-${this.props.dayIndex}`} >
+            <div className="row center graphContainer">
+                <div className="card grey lighten-5" id={`graphContainer-${this.props.dayIndex}`} >
                     <div className="card-content" id="mainSet">
                         <span className="card-title">{ this.props.dayIndex ? `${this.getCurrentDay()}'s` : "Today's" } Activity - { this.props.dayDataSingle.date }</span>
                         <div id={`graph-${this.props.dayIndex}`} />
