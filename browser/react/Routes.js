@@ -37,7 +37,7 @@ Routes.propTypes = {
 /* -----------------    CONTAINER     ------------------ */
 
 const mapProps = (state) => ({
-    user: state.user
+    user: state.user,
 });
 
 const mapDispatch = dispatch => ({
@@ -46,7 +46,6 @@ const mapDispatch = dispatch => ({
         dispatch(fetchUser());
     },
     fetchGraphData: () => {
-        console.log('Fetching graph data');
         dispatch(fetchCodeData7Days());
     }
 });
