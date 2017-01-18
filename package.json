@@ -38,6 +38,7 @@
     "wakatime-promise": "^0.3.0"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0",
     "webpack": "^1.14.0"
   }
 }
