@@ -14,7 +14,8 @@ module.exports = router;
 // USE - Jawbone Authentication
 router.use((req, res, next) => {
     const options = {
-        access_token: req.user.token,
+        // Temporarily getting a stored access token for the arduino
+        access_token: (req.user && req.user.token) || process.tempStorage.upAccess,
         client_id: jawboneAuth.clientID,
         client_secret: jawboneAuth.clientSecret
     };

@@ -37,6 +37,11 @@ passport.use('jawbone', new JawboneStrategy({
     };
     const up = require('jawbone-up')(options);
 
+    // Temporarily hack the token to save for every request
+    process.tempStorage = {
+        upAccess: token
+    };
+
     up.me.get({}, function(err, body) {
         if (err) {
             console.log('Error receiving Jawbone UP data');
