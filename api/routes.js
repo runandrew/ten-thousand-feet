@@ -13,5 +13,6 @@ const routerJawbone = require('./jawbone/routes');
 const router = express.Router();
 module.exports = router;
 
+// Routing
 router.use('/wakatime', routerWakatime);
 router.use('/jawbone', routerJawbone);

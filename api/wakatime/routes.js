@@ -3,8 +3,8 @@
 // Required packages
 const express = require('express');
 
-// Constants
-const wakatimeAPIKey = '3cefa018-fe33-4b4c-af90-7bfed6b75e72';
+// Required files
+const { wakatimeAPIKey } = require('../../.secrets.js');
 
 // Required files
 const wakatime = require('./interface.js')(wakatimeAPIKey);
@@ -20,5 +20,5 @@ router.get('/durations', (req, res, next) => {
     .then(result => {
         res.send(result);
     })
-    .catch(err => console.error(err));
+    .catch(err => next(err));
 });

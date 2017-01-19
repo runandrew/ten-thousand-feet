@@ -16,7 +16,7 @@ const routerAuth = require('./auth');
 
 // App creation
 const app = express();
-const port = 8585;
+const PORT = 8585;
 
 // Setup SSL
 const sslOptions = {
@@ -45,28 +45,12 @@ app.use(passport.session());
 
 // Passport serialization
 passport.serializeUser(function (user, done) {
-    // console.log('*********************** SERIALIZE USER ***********************');
-    // console.log(user);
     done(null, user);
 });
 
 passport.deserializeUser(function (user, done) {
-    // console.log('*********************** DESERIALIZE USER ***********************');
-    // console.log(id);
     done(null, user);
 });
-
-// Log the session object for each call
-// app.use((req, res, next) => {
-//     if (!req.session.count) req.session.count = 0;
-//     console.log('**** This is the session count: ', ++req.session.count);
-//
-//     console.log('------------------- THIS IS THE CURRENT SESSION -------------------');
-//     console.log(req.session);
-//     console.log('------------------ / THIS IS THE CURRENT SESSION ------------------');
-//     next();
-// });
-
 
 // Routers
 app.use('/api', routerApi);
@@ -76,8 +60,10 @@ app.use('/auth', routerAuth);
 app.use('/', express.static(path.join(__dirname, '/public')));
 app.use('/materialize', express.static(path.join(__dirname, '/node_modules/materialize-css/dist')));
 
-var validFrontendRoutes = ['/', '/login', '/graphs', '/graphs/:dayId'];
-var indexPath = path.join(__dirname, '/public', 'index.html');
+const validFrontendRoutes = ['/', '/login', '/graphs', '/graphs/:dayId'];
+const indexPath = path.join(__dirname, '/public', 'index.html');
+
+// Create valid frontend route, create a GET that sends the index path
 validFrontendRoutes.forEach(function (stateRoute) {
     app.get(stateRoute, function (req, res) {
         res.sendFile(indexPath);
@@ -85,12 +71,8 @@ validFrontendRoutes.forEach(function (stateRoute) {
 });
 
 // Start the server
-// app.listen(port, () => {
-//     console.log(`We're online on port ${port}`);
-// });
-
-const secureServer = https.createServer(sslOptions, app).listen(port, function(){
-    console.log(`We're online on port ${port}`);
+https.createServer(sslOptions, app).listen(PORT, function(){
+    console.log(`We're online on port ${PORT}`);
 });
 
 // Error logging middleware

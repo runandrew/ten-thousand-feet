@@ -1,4 +1,4 @@
-/*eslint new-cap: ["error", { "capIsNew": false }]*/
+/*eslint new-cap: ["error", { "capIsNew": false }] camelcase: ["error", {properties: "never"}] */
 
 // Required packages
 const express = require('express');
@@ -25,7 +25,7 @@ router.use((req, res, next) => {
     next();
 });
 
-// GET - /api/wakatime/durations?date - Grab durations data for one specific date
+// GET - /api/jawbone/moves - Grab physical data for the past 10 days
 router.get('/moves', (req, res, next) => {
     req.upAPI.moves.get({}, function(err, body) {
         if (err) {

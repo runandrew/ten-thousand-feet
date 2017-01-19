@@ -1,21 +1,15 @@
-/*eslint new-cap: ["error", { "capIsNew": false }]*/
+/*eslint new-cap: ["error", { "capIsNew": false }] camelcase: ["error", {properties: "never"}] */
 
 // Required packages
 const express = require('express');
 const passport = require('passport');
 const JawboneStrategy = require('passport-oauth').OAuth2Strategy;
 
+// Required files
+const { jawboneAuth } = require('../.secrets.js'); // Authentication parameters
+
 // Router creation
 const routerJawbone = express.Router();
-
-// Authentication parameters
-const jawboneAuth = {
-    clientID: 'H1T3Ml7A6cw',
-    clientSecret: 'd980021dbf3e14592b0ed9fc16b5cfeeafd04fad',
-    authorizationURL: 'https://jawbone.com/auth/oauth2/auth',
-    tokenURL: 'https://jawbone.com/auth/oauth2/token',
-    callbackURL: 'https://localhost:8585/auth/jawbone/callback'
-};
 
 // Exports
 module.exports = {
@@ -53,7 +47,7 @@ routerJawbone.get('/', passport.authenticate('jawbone', { scope: ['basic_read', 
 
 routerJawbone.get('/callback',
 passport.authenticate('jawbone', {
-    successRedirect: '/graphs', // or wherever
-    failureRedirect: '/login' // or wherever
+    successRedirect: '/graphs',
+    failureRedirect: '/login'
 })
 );
