@@ -24,6 +24,7 @@ export const graphDonut = () => {
             let colProgress = '#3399FF';
             let colOffWhite = props.graphSettings.colOffWhite;
 
+            // Decide what type of circle graph this is
             if (props.type === 'coding') {
                 const codingHours = state.dayTotals.coding;
                 const codingHoursPct = ((codingHours / 5) * 100);

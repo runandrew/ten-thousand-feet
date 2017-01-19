@@ -8,7 +8,10 @@ const Navbar = (props) => {
 
     return (
         <nav className="blue darken-3" role="navigation">
-            <div className="nav-wrapper container"><Link id="logo-container" to="/" className="brand-logo"><img src="/img/logo.png" width="50px"/>10,000 feet</Link>
+            <div className="nav-wrapper container">
+                <Link id="logo-container" to="/" className="brand-logo">
+                    <img src="/img/logo.png" width="50px"/>10,000 feet
+                </Link>
                 <ul className="right hide-on-med-and-down">
                     { props.user.noUser && <li><Link to="/login">Login</Link></li> }
                     { !props.user.noUser && <li><Link to="/graphs">Graphs</Link></li> }
@@ -22,6 +25,7 @@ const Navbar = (props) => {
                     <li><Link to="/login">Login</Link></li>
                     <li><Link to="/auth/logout">Logout</Link></li>
                 </ul>
+
                 <a href="#" data-activates="nav-mobile" className="button-collapse"><i className="material-icons">menu</i></a>
             </div>
         </nav>

@@ -71,9 +71,9 @@
 	
 	// Required files
 	_reactDom2.default.render(_react2.default.createElement(
-	  _reactRedux.Provider,
-	  { store: _store2.default },
-	  _react2.default.createElement(_Routes2.default, null)
+	    _reactRedux.Provider,
+	    { store: _store2.default },
+	    _react2.default.createElement(_Routes2.default, null)
 	), document.getElementById('app')); // Required packages
 
 /***/ },
@@ -23745,7 +23745,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 	
 	var _redux = __webpack_require__(189);
@@ -23764,7 +23764,12 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	// Create the store
+	
+	// Required packages
 	exports.default = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default, (0, _reduxLogger2.default)()));
+	
+	// Required files
 
 /***/ },
 /* 217 */
@@ -24676,7 +24681,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	// Required files
-	exports.default = (0, _redux.combineReducers)({ dayData: _apiData2.default, user: _user2.default }); // Required packages
+	exports.default = (0, _redux.combineReducers)({ dayData: _apiData2.default, user: _user2.default });
+	// Required packages
 
 /***/ },
 /* 225 */
@@ -24698,7 +24704,8 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } // Required packages
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+	// Required packages
 	
 	
 	/* -----------------    ACTIONS     ------------------ */
@@ -24737,7 +24744,11 @@
 	    switch (action.type) {
 	        case SET_DATA:
 	            {
-	                return Object.assign({}, dayData, { allDays: action.data, isFetching: false, lastFetched: new Date() });
+	                return Object.assign({}, dayData, {
+	                    allDays: action.data,
+	                    isFetching: false,
+	                    lastFetched: new Date()
+	                });
 	            }
 	        case SET_FETCH_STATUS:
 	            {
@@ -24755,16 +24766,19 @@
 	
 	        var convertedDates = (0, _utils.past7dates)();
 	
+	        // Get all the coding data
 	        var promiseArrayCodeData = convertedDates.map(function (date) {
 	            return _axios2.default.get('/api/wakatime/durations?date=' + date).then(function (returnedData) {
 	                return returnedData.data;
 	            }).catch(console.error);
 	        });
 	
+	        // Get all the phycial data
 	        var promisePhysicalData = _axios2.default.get('/api/jawbone/moves').then(function (returnedData) {
 	            return returnedData.data;
 	        }).catch(console.error);
 	
+	        // Wait for all the promises to resolve/reject then convert the data
 	        return Promise.all([].concat(_toConsumableArray(promiseArrayCodeData), [promisePhysicalData])).then(function (data) {
 	            var allData = {
 	                coding: data.slice(0, -1),
@@ -26557,7 +26571,6 @@
 	var mapDispatch = function mapDispatch(dispatch) {
 	    return {
 	        fetchInitialData: function fetchInitialData() {
-	            console.log('Fetching user data');
 	            dispatch((0, _user.fetchUser)());
 	        },
 	        fetchGraphData: function fetchGraphData() {
@@ -31504,15 +31517,11 @@
 	
 	var _Navbar2 = _interopRequireDefault(_Navbar);
 	
-	var _Graphs = __webpack_require__(309);
-	
-	var _Graphs2 = _interopRequireDefault(_Graphs);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	// Required files
+	// Required packages
 	var Root = function Root(props) {
 	    return _react2.default.createElement(
 	        'div',
@@ -31520,7 +31529,16 @@
 	        _react2.default.createElement(_Navbar2.default, null),
 	        props.children
 	    );
-	}; // Required packages
+	};
+	
+	// PropType validaiton
+	
+	
+	// Required files
+	Root.propTypes = {
+	    children: _react2.default.PropTypes.object
+	};
+	
 	exports.default = Root;
 	
 	/* -----------------    CONTAINER     ------------------ */
@@ -31710,9 +31728,15 @@
 	    );
 	};
 	
+	// PropType validaiton
+	Graphs.propTypes = {
+	    isFetching: _react2.default.PropTypes.bool,
+	    allDays: _react2.default.PropTypes.array
+	};
+	
 	/* -----------------    CONTAINER     ------------------ */
 	
-	var mapProps = function mapProps(state, ownProps) {
+	var mapProps = function mapProps(state) {
 	    return {
 	        allDays: state.dayData.allDays,
 	        isFetching: state.dayData.isFetching
@@ -31773,7 +31797,7 @@
 	            svg: null
 	        };
 	
-	        _this.graph = (0, _singleGraph.d3SingleGraph)();
+	        _this.graph = (0, _singleGraph.d3SingleGraph)(); // Create a new graph with the factory function
 	        return _this;
 	    }
 	
@@ -31889,7 +31913,8 @@
 	SingleGraph.propTypes = {
 	    durationData: _react2.default.PropTypes.object,
 	    graphSettings: _react2.default.PropTypes.object,
-	    dayIndex: _react2.default.PropTypes.number
+	    dayIndex: _react2.default.PropTypes.number,
+	    dayDataSingle: _react2.default.PropTypes.object
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
@@ -31978,7 +32003,6 @@
 	        _scales: function _scales(props, state) {
 	
 	            // Destructure the day string
-	            //const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
 	            var date = state.dayDataSingle.date;
 	
 	            // SVG Parameters
@@ -31999,7 +32023,6 @@
 	        _createAxes: function _createAxes(props) {
 	
 	            var xScale = props._scales.xScale;
-	            var yScale = props._scales.yScale;
 	            var yScaleSteps = props._scales.yScaleSteps;
 	
 	            // Axis creation
@@ -32113,7 +32136,7 @@
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
-	var LoadingIcon = function LoadingIcon(props) {
+	var LoadingIcon = function LoadingIcon() {
 	    return _react2.default.createElement(
 	        "div",
 	        { className: "row", id: "loader" },
@@ -32145,10 +32168,9 @@
 	            )
 	        )
 	    );
-	}; // Required packages
+	};
+	// Required packages
 	exports.default = LoadingIcon;
-	
-	/* -----------------    CONTAINER     ------------------ */
 
 /***/ },
 /* 313 */
@@ -32165,8 +32187,6 @@
 	var _react2 = _interopRequireDefault(_react);
 	
 	var _reactRedux = __webpack_require__(178);
-	
-	var _reactRouter = __webpack_require__(254);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -32299,6 +32319,12 @@
 	    );
 	};
 	
+	// PropType validaiton
+	GraphDetail.propTypes = {
+	    dayId: _react2.default.PropTypes.string,
+	    isFetching: _react2.default.PropTypes.bool
+	};
+	
 	/* -----------------    CONTAINER     ------------------ */
 	
 	var mapProps = function mapProps(state, ownProps) {
@@ -32330,8 +32356,6 @@
 	
 	var _reactRedux = __webpack_require__(178);
 	
-	var _reactRouter = __webpack_require__(254);
-	
 	var _donutGraph = __webpack_require__(316);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -32345,7 +32369,6 @@
 	
 	
 	// Required files
-	// import { graphSettings, d3SingleGraph } from '../../d3/single-graph';
 	
 	
 	/* -----------------    COMPONENT     ------------------ */
@@ -32371,11 +32394,6 @@
 	            }, { dayTotals: this.props.dayTotals });
 	        }
 	    }, {
-	        key: 'typeToName',
-	        value: function typeToName(type) {
-	            return type.charAt(0).toUpperCase() + type.slice(1);
-	        }
-	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -32387,11 +32405,16 @@
 	                    _react2.default.createElement(
 	                        'span',
 	                        { className: 'card-title' },
-	                        this.typeToName(this.props.type)
+	                        GraphCircularProgress.typeToName(this.props.type)
 	                    ),
 	                    _react2.default.createElement('div', { id: 'graphCircularProgress-' + this.props.type })
 	                )
 	            );
+	        }
+	    }], [{
+	        key: 'typeToName',
+	        value: function typeToName(type) {
+	            return type.charAt(0).toUpperCase() + type.slice(1);
 	        }
 	    }]);
 	
@@ -32404,7 +32427,9 @@
 	GraphCircularProgress.propTypes = {
 	    durationData: _react2.default.PropTypes.object,
 	    graphSettings: _react2.default.PropTypes.object,
-	    dayIndex: _react2.default.PropTypes.number
+	    dayIndex: _react2.default.PropTypes.number,
+	    dayTotals: _react2.default.PropTypes.object,
+	    type: _react2.default.PropTypes.string
 	};
 	
 	/* -----------------    CONTAINER     ------------------ */
@@ -32459,6 +32484,7 @@
 	            var colProgress = '#3399FF';
 	            var colOffWhite = props.graphSettings.colOffWhite;
 	
+	            // Decide what type of circle graph this is
 	            if (props.type === 'coding') {
 	                var codingHours = state.dayTotals.coding;
 	                var codingHoursPct = codingHours / 5 * 100;
@@ -32531,8 +32557,6 @@
 	var _reactRedux = __webpack_require__(178);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	// Required files
 	
 	/* -----------------    COMPONENT     ------------------ */
 	
@@ -32613,8 +32637,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	// Required files
-	
 	/* -----------------    COMPONENT     ------------------ */
 	
 	// Required packages
@@ -32657,16 +32679,6 @@
 	};
 	
 	exports.default = Landing;
-	
-	/* -----------------    CONTAINER     ------------------ */
-	
-	// <h1 className="header center black-text">Bring a Balance to Your Life</h1>
-	// <div className="row center">
-	//   <h5 className="header col s12 light">Get a high-level overview of your day</h5>
-	// </div>
-	// <div className="row center">
-	//   <Link href="/login" id="download-button" className="btn-large waves-effect waves-light blue lighten-4 black-text">Get Started</Link>
-	// </div>
 
 /***/ }
 /******/ ]);

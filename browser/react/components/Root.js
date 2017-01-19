@@ -3,7 +3,6 @@ import React from 'react';
 
 // Required files
 import Navbar from './Navbar';
-import Graphs from './Graphs';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -14,6 +13,11 @@ const Root = (props) => {
             { props.children }
         </div>
     );
+};
+
+// PropType validaiton
+Root.propTypes = {
+    children: React.PropTypes.object
 };
 
 export default Root;

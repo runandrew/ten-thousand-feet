@@ -3,8 +3,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-// Required files
-
 /* -----------------    COMPONENT     ------------------ */
 
 const ProjectsWorkedOn = (props) => {

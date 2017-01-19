@@ -1,9 +1,10 @@
+
 // Required packages
 import React from 'react';
 
 /* -----------------    COMPONENT     ------------------ */
 
-const LoadingIcon = (props) => {
+const LoadingIcon = () => {
     return (
         <div className="row" id="loader">
             <div className="col s4 offset-s4 center">
@@ -26,5 +27,3 @@ const LoadingIcon = (props) => {
 };
 
 export default LoadingIcon;
-
-/* -----------------    CONTAINER     ------------------ */

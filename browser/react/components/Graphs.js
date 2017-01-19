@@ -21,9 +21,15 @@ const Graphs = (props) => {
     );
 };
 
+// PropType validaiton
+Graphs.propTypes = {
+    isFetching: React.PropTypes.bool,
+    allDays: React.PropTypes.array
+};
+
 /* -----------------    CONTAINER     ------------------ */
 
-const mapProps = (state, ownProps) => {
+const mapProps = (state) => {
     return {
         allDays: state.dayData.allDays,
         isFetching: state.dayData.isFetching

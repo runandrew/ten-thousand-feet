@@ -71,7 +71,6 @@ export const d3SingleGraph = () => {
         _scales: function (props, state) {
 
             // Destructure the day string
-            //const [year, month, day] = state.durationData.start.split('T')[0].split('-').map(str => +str);
             let date = state.dayDataSingle.date;
 
             // SVG Parameters
@@ -98,7 +97,6 @@ export const d3SingleGraph = () => {
         _createAxes: function (props) {
 
             const xScale = props._scales.xScale;
-            const yScale = props._scales.yScale;
             const yScaleSteps = props._scales.yScaleSteps;
 
             // Axis creation

@@ -42,7 +42,6 @@ const mapProps = (state) => ({
 
 const mapDispatch = dispatch => ({
     fetchInitialData: () => {
-        console.log('Fetching user data');
         dispatch(fetchUser());
     },
     fetchGraphData: () => {

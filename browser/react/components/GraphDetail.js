@@ -30,7 +30,7 @@ const GraphDetail = (props) => {
                 <ProjectsWorkedOn dayIndex={+props.dayId} />
             </div>
         </div>
-    )
+    );
 
     return (
         <div className="section no-pad-bot" >
@@ -41,6 +41,12 @@ const GraphDetail = (props) => {
     );
 
 
+};
+
+// PropType validaiton
+GraphDetail.propTypes = {
+    dayId: React.PropTypes.string,
+    isFetching: React.PropTypes.bool
 };
 
 /* -----------------    CONTAINER     ------------------ */

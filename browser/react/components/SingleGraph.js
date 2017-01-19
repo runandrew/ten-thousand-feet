@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 
 // Required files
 import { graphSettings, d3SingleGraph } from '../../d3/single-graph';
-import { dateStrToUTC, dateUTCToDayStr } from '../../utils';
+import { dateUTCToDayStr } from '../../utils';
 
 /* -----------------    COMPONENT     ------------------ */
 
@@ -17,7 +17,7 @@ class SingleGraph extends React.Component {
             svg: null
         };
 
-        this.graph  = d3SingleGraph();
+        this.graph  = d3SingleGraph(); // Create a new graph with the factory function
     }
 
     componentDidMount() {
@@ -58,7 +58,9 @@ class SingleGraph extends React.Component {
                         <Link to={`/graphs/${this.props.dayIndex}`}>Details</Link>
                         <Link to="#">Share</Link>
                         <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.physicalData.totalSteps} steps total` }</span>
-                        <span className="cardStatsSpacing">{ `${this.props.dayDataSingle.codingData.totalCodingHours} ${this.props.dayDataSingle.codingData.totalCodingHours <= 1 && this.props.dayDataSingle.codingData.totalCodingHours > 0 ? 'hour' : 'hours'} coding` }</span>
+                        <span className="cardStatsSpacing">{
+                            `${this.props.dayDataSingle.codingData.totalCodingHours} ${this.props.dayDataSingle.codingData.totalCodingHours <= 1
+                            && this.props.dayDataSingle.codingData.totalCodingHours > 0 ? 'hour' : 'hours'} coding` }</span>
                     </div>
                 </div>
                 <div id={`tooltip-${this.props.dayIndex}`} className="hidden tooltip">
@@ -74,7 +76,8 @@ class SingleGraph extends React.Component {
 SingleGraph.propTypes = {
     durationData: React.PropTypes.object,
     graphSettings: React.PropTypes.object,
-    dayIndex: React.PropTypes.number
+    dayIndex: React.PropTypes.number,
+    dayDataSingle: React.PropTypes.object
 };
 
 /* -----------------    CONTAINER     ------------------ */

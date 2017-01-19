@@ -1,3 +1,4 @@
+
 // Required packages
 import axios from 'axios';
 import { past7dates, convertAllData } from '../../utils';
@@ -32,7 +33,13 @@ const initialData = {
 export default function reducer (dayData = initialData, action) {
     switch (action.type) {
         case SET_DATA: {
-            return Object.assign({}, dayData, { allDays: action.data, isFetching: false, lastFetched: new Date() });
+            return Object.assign({}, dayData,
+                {
+                    allDays: action.data,
+                    isFetching: false,
+                    lastFetched: new Date()
+                }
+            );
         }
         case SET_FETCH_STATUS: {
             return Object.assign({}, dayData, { isFetching: action.data });
@@ -48,16 +55,19 @@ export const fetchCodeData7Days = () => {
 
         const convertedDates = past7dates();
 
+        // Get all the coding data
         const promiseArrayCodeData = convertedDates.map(date => {
             return axios.get(`/api/wakatime/durations?date=${date}`)
             .then(returnedData => returnedData.data)
             .catch(console.error);
         });
 
+        // Get all the phycial data
         const promisePhysicalData = axios.get('/api/jawbone/moves')
         .then(returnedData => returnedData.data)
         .catch(console.error);
 
+        // Wait for all the promises to resolve/reject then convert the data
         return Promise.all([...promiseArrayCodeData, promisePhysicalData])
         .then(data => {
             const allData = {
