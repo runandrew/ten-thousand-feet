@@ -32514,21 +32514,21 @@
 	
 	            var arc = d3.arc().outerRadius(radius).innerRadius(radius - 20);
 	
-	            var pie = d3.pie().sort(null).startAngle(0 * Math.PI).endAngle(2 * Math.PI).value(function (d) {
-	                return d;
+	            var pie = d3.pie().sort(null).startAngle(0 * Math.PI).endAngle(2 * Math.PI).value(function (dataVal) {
+	                return dataVal;
 	            });
 	
-	            var g = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
+	            var group = svg.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
 	
-	            g.append('text').text(data[0] + '%').attr('x', 0).attr('y', 20).attr('font-size', width / 5 + 'px').attr('fill', 'black').attr('text-anchor', 'middle');
+	            group.append('text').text(data[0] + '%').attr('x', 0).attr('y', 20).attr('font-size', width / 5 + 'px').attr('fill', 'black').attr('text-anchor', 'middle');
 	
-	            g.append('path').style('fill', function (d, i) {
-	                return colors[d.index];
-	            }).transition().delay(150).duration(500).attrTween('d', function (d) {
-	                var i = d3.interpolate(d.startAngle, d.endAngle);
-	                return function (t) {
-	                    d.endAngle = i(t);
-	                    return arc(d);
+	            group.append('path').style('fill', function (dataFills) {
+	                return colors[dataFills.index];
+	            }).transition().delay(150).duration(500).attrTween('d', function (dataAngle) {
+	                var angleFn = d3.interpolate(dataAngle.startAngle, dataAngle.endAngle);
+	                return function (endAngle) {
+	                    dataAngle.endAngle = angleFn(endAngle);
+	                    return arc(dataAngle);
 	                };
 	            });
 	

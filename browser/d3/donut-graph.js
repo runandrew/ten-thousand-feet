@@ -50,7 +50,7 @@ export const graphDonut = () => {
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
             .append('g')
-            .attr('transform', 'translate(' + ((width/2)+margin.left) + ',' + ((height/2)+margin.top) + ')');
+            .attr('transform', 'translate(' + (( width / 2 ) + margin.left) + ',' + (( height / 2 ) + margin.top) + ')');
 
 
             const radius = Math.min(width, height) / 2;
@@ -65,15 +65,15 @@ export const graphDonut = () => {
             .sort(null)
             .startAngle(0 * Math.PI)
             .endAngle(2 * Math.PI)
-            .value(function(d) { return d; });
+            .value(function(dataVal) { return dataVal; });
 
-            const g = svg.selectAll('.arc')
+            const group = svg.selectAll('.arc')
             .data(pie(data))
             .enter()
             .append('g')
             .attr('class', 'arc');
 
-            g.append('text')
+            group.append('text')
             .text(data[0] + '%')
             .attr('x', 0)
             .attr('y', 20)
@@ -81,16 +81,16 @@ export const graphDonut = () => {
             .attr('fill', 'black')
             .attr('text-anchor', 'middle');
 
-            g.append('path')
-            .style('fill', function(d, i) { return colors[d.index]; })
+            group.append('path')
+            .style('fill', function(dataFills) { return colors[dataFills.index]; })
             .transition()
             .delay(150)
             .duration(500)
-            .attrTween('d', function(d) {
-                var i = d3.interpolate(d.startAngle, d.endAngle);
-                return function(t) {
-                    d.endAngle = i(t);
-                    return arc(d);
+            .attrTween('d', function(dataAngle) {
+                const angleFn = d3.interpolate(dataAngle.startAngle, dataAngle.endAngle);
+                return function(endAngle) {
+                    dataAngle.endAngle = angleFn(endAngle);
+                    return arc(dataAngle);
                 };
             });
 
